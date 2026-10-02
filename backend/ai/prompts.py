@@ -32,6 +32,9 @@ You MUST adhere to these strict rules:
    - Line 2: State WHO is impacted or the direct practical consequence.
    - NO editorial opinions, NO speculation, NO financial advice.
    - Format lines separated by a newline character (\\n).
+6. LANGUAGE:
+   - ALL output headlines and summaries MUST be written in English.
+   - If the source announcement is in Hindi, Spanish, or another regional language, translate the core facts into clean, professional English.
 """
 
 EXTRACTION_USER_PROMPT = """

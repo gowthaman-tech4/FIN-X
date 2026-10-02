@@ -1,4 +1,6 @@
+import re
 import json
+import time
 import logging
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
@@ -18,8 +20,8 @@ class ProcessedStoryResult(BaseModel):
 
 class GeminiStoryProcessor:
     """
-    AI processor using Gemini API (Free Tier) to filter, classify,
-    and generate strict 2-line executive summaries.
+    Enterprise-grade AI processor using Gemini API (Free Tier).
+    Includes rate-limit management, automatic retries, and markdown JSON stripping.
     """
 
     def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-3.8-flash"):
@@ -34,12 +36,25 @@ class GeminiStoryProcessor:
             except Exception as e:
                 logger.warning(f"Could not initialize Google GenAI client: {e}")
 
-    def process_raw_item(self, raw_item: Dict[str, Any]) -> Optional[ProcessedStoryResult]:
+    def _clean_json_response(self, text: str) -> str:
+        """Strip markdown code fences and extraneous text around JSON."""
+        clean = text.strip()
+        # Remove ```json and ```
+        clean = re.sub(r'^```(?:json)?\s*', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\s*```$', '', clean)
+        # Find first { and last }
+        start = clean.find('{')
+        end = clean.rfind('}')
+        if start != -1 and end != -1:
+            clean = clean[start:end+1]
+        return clean
+
+    def process_raw_item(self, raw_item: Dict[str, Any], max_retries: int = 2) -> Optional[ProcessedStoryResult]:
         """
         Process a single raw discovered item into an organized FIN-X story.
-        Falls back to rule-based heuristic extraction if Gemini API is offline or unconfigured.
+        Features retry logic for transient API issues and falls back gracefully.
         """
-        title = raw_item.get("title", "")
+        title = raw_item.get("title", "").strip()
         content = raw_item.get("raw_content", "") or raw_item.get("summary_hint", "")
         source_name = raw_item.get("source_name", "Unknown")
         authority = raw_item.get("authority_level", "P1")
@@ -48,50 +63,54 @@ class GeminiStoryProcessor:
         if not title:
             return None
 
-        # If Gemini client is configured, call Gemini API
         if self.client:
-            try:
-                prompt = EXTRACTION_USER_PROMPT.format(
-                    source_name=source_name,
-                    authority_level=authority,
-                    country_hint=country_hint,
-                    title=title,
-                    content=content[:1000]
-                )
+            for attempt in range(max_retries + 1):
+                try:
+                    prompt = EXTRACTION_USER_PROMPT.format(
+                        source_name=source_name,
+                        authority_level=authority,
+                        country_hint=country_hint,
+                        title=title,
+                        content=content[:1000]
+                    )
 
-                response = self.client.models.generate_content(
-                    model=self.model_name,
-                    contents=prompt,
-                    config={
-                        "system_instruction": CLASSIFY_AND_SUMMARIZE_SYSTEM_PROMPT,
-                        "response_mime_type": "application/json",
-                        "temperature": 0.1,
-                    }
-                )
+                    response = self.client.models.generate_content(
+                        model=self.model_name,
+                        contents=prompt,
+                        config={
+                            "system_instruction": CLASSIFY_AND_SUMMARIZE_SYSTEM_PROMPT,
+                            "response_mime_type": "application/json",
+                            "temperature": 0.1,
+                        }
+                    )
 
-                data = json.loads(response.text)
-                result = ProcessedStoryResult(**data)
+                    cleaned_json = self._clean_json_response(response.text)
+                    data = json.loads(cleaned_json)
+                    result = ProcessedStoryResult(**data)
 
-                # Skip non-financial items
-                if not result.is_finance:
-                    logger.info(f"Item filtered out (not finance): {title}")
-                    return None
+                    # Filter out non-financial news
+                    if not result.is_finance:
+                        logger.info(f"Item filtered out as non-finance: '{title[:40]}'")
+                        return None
 
-                return result
+                    return result
 
-            except Exception as e:
-                logger.error(f"Gemini API processing failed for '{title}': {e}. Using heuristic fallback.")
+                except Exception as e:
+                    logger.warning(f"Gemini API attempt {attempt + 1} failed for '{title[:40]}': {e}")
+                    if attempt < max_retries:
+                        time.sleep(2 * (attempt + 1)) # Exponential backoff
+                    else:
+                        logger.error(f"All {max_retries + 1} Gemini attempts failed. Falling back to heuristics.")
 
-        # Fallback heuristic processor (ensures ₹0 continuous pipeline during local testing)
+        # Robust heuristic fallback
         return self._heuristic_fallback(raw_item)
 
     def _heuristic_fallback(self, raw_item: Dict[str, Any]) -> ProcessedStoryResult:
         """Heuristic classifier & summarizer for testing without consuming API quota."""
         title = raw_item.get("title", "").strip()
-        source = raw_item.get("source_name", "").lower()
+        source = raw_item.get("source_name", "")
         country = raw_item.get("country", "IN")
         
-        # Domain detection
         domain = "markets"
         subdomain = "general"
         importance = "medium"
@@ -119,9 +138,8 @@ class GeminiStoryProcessor:
         if any(w in lower_title for w in ["critical", "mandatory", "urgent", "decision", "milestone"]):
             importance = "critical"
 
-        # 2-line summary generation
-        line1 = f"Official update announced regarding {title.lower()}."
-        line2 = f"Stakeholders in {country} should review direct compliance instructions from {raw_item.get('source_name')}."
+        line1 = f"Official update announced regarding {title[:80]}."
+        line2 = f"Market participants in {country} should review compliance guidelines issued by {source}."
 
         return ProcessedStoryResult(
             is_finance=True,
