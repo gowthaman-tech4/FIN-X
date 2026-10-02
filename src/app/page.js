@@ -37,6 +37,29 @@ export default function Home() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
   const [isSourceRegistryOpen, setIsSourceRegistryOpen] = useState(false);
+  const [allStories, setAllStories] = useState(INITIAL_STORIES);
+  const [isLiveDB, setIsLiveDB] = useState(false);
+
+  // Fetch live stories from Supabase database via /api/stories
+  useEffect(() => {
+    async function loadLiveStories() {
+      try {
+        const res = await fetch('/api/stories');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.stories && data.stories.length > 0) {
+            setAllStories(data.stories);
+            if (data.source === 'live_supabase') {
+              setIsLiveDB(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch live stories, using initial cache:', err);
+      }
+    }
+    loadLiveStories();
+  }, []);
 
   // Load saved bookmarks from localStorage on mount
   useEffect(() => {
@@ -68,7 +91,7 @@ export default function Home() {
     const counts = { all: 0 };
     DOMAINS.forEach(d => { counts[d.id] = 0; });
 
-    INITIAL_STORIES.forEach((story) => {
+    allStories.forEach((story) => {
       const matchesCountry = selectedCountry === 'ALL' || story.country === selectedCountry || story.country === 'GLOBAL';
       if (matchesCountry) {
         counts.all += 1;
@@ -79,11 +102,11 @@ export default function Home() {
     });
 
     return counts;
-  }, [selectedCountry]);
+  }, [allStories, selectedCountry]);
 
   // Main filter pipeline
   const filteredStories = useMemo(() => {
-    return INITIAL_STORIES.filter((story) => {
+    return allStories.filter((story) => {
       // 1. Country filter
       if (selectedCountry !== 'ALL' && story.country !== selectedCountry && story.country !== 'GLOBAL') {
         return false;
@@ -128,11 +151,11 @@ export default function Home() {
     if (activeDomain !== 'all' || searchQuery.trim() || showOnlySaved) {
       return [];
     }
-    return INITIAL_STORIES.filter(s => {
+    return allStories.filter(s => {
       const matchesCountry = selectedCountry === 'ALL' || s.country === selectedCountry || s.country === 'GLOBAL';
       return matchesCountry && (s.is_top_story || s.importance === 'critical' || s.importance === 'high');
     }).slice(0, 5);
-  }, [activeDomain, searchQuery, showOnlySaved, selectedCountry]);
+  }, [allStories, activeDomain, searchQuery, showOnlySaved, selectedCountry]);
 
   const officialCount = useMemo(() => {
     return filteredStories.filter(s => s.source_type === 'official' || s.authority_level === 'P0').length;
@@ -216,6 +239,12 @@ export default function Home() {
                 </div>
 
                 <div className="feed-header-right">
+                  {isLiveDB && (
+                    <span className="live-db-pill">
+                      <span className="live-dot" />
+                      <span>Live Supabase ({allStories.length} Stories)</span>
+                    </span>
+                  )}
                   <span className="sort-label">Sorted by Authority & Relevance</span>
                 </div>
               </div>
@@ -404,8 +433,32 @@ export default function Home() {
         }
 
         .feed-header-right {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
           font-size: 0.72rem;
           color: var(--text-muted);
+        }
+
+        .live-db-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          background: rgba(16, 185, 129, 0.12);
+          border: 1px solid rgba(16, 185, 129, 0.3);
+          color: #10b981;
+          font-size: 0.68rem;
+          font-weight: 600;
+          padding: 0.15rem 0.5rem;
+          border-radius: 9999px;
+        }
+
+        .live-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 6px #10b981;
         }
 
         .stories-stream {
