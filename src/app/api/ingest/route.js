@@ -133,7 +133,6 @@ async function handleIngest(request) {
     duration_seconds: 0
   };
 
-  const { searchParams } = new URL(request.url);
   const slot = searchParams.get('slot') || 'morning';
 
   for (const feed of CURATED_FEEDS) {
