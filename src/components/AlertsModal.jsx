@@ -9,14 +9,48 @@ import {
   ShieldCheck, 
   Mail, 
   Lock, 
-  ArrowRight 
+  ArrowRight,
+  Sparkles,
+  Smartphone,
+  Clock,
+  Send
 } from 'lucide-react';
 import { DOMAINS } from '../data/mockData';
 
-export default function AlertsModal({ isOpen, onClose }) {
+export default function AlertsModal({ isOpen, onClose, onTriggerToast }) {
+  const [frequency, setFrequency] = useState('1x'); // '1x' or '3x'
   const [selectedDomains, setSelectedDomains] = useState(['tax', 'regulations']);
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeHookIndex, setActiveHookIndex] = useState(0);
+
+  const WITTY_HOOKS = [
+    {
+      title: "☕ Chai & Circulars",
+      body: "CBDT just dropped revised capital gains guidelines. Is your portfolio safe? Read in 30 secs.",
+      tag: "TAX & GST"
+    },
+    {
+      title: "🤫 Don't panic scroll Twitter",
+      body: "RBI just tightened digital banking liquidity rules. Here's what it actually means in 2 lines.",
+      tag: "REGULATIONS"
+    },
+    {
+      title: "🚨 10 Days to Tax Deadline!",
+      body: "Avoid the 1% monthly interest penalty. Check the 60-second advance tax checklist.",
+      tag: "CALENDAR"
+    },
+    {
+      title: "🍕 Hot & Fresh at 1:00 PM",
+      body: "Just like Swiggy brings lunch, FIN-X delivers the Midday Market Pulse. Zero drama.",
+      tag: "MARKETS"
+    },
+    {
+      title: "📈 Sensex did gymnastics today",
+      body: "Skip the TV noise. The 2 official reasons why equities swung before closing bell.",
+      tag: "MARKETS"
+    }
+  ];
 
   if (!isOpen) return null;
 
@@ -28,24 +62,52 @@ export default function AlertsModal({ isOpen, onClose }) {
     }
   };
 
+  const handleTestNotification = () => {
+    const hook = WITTY_HOOKS[activeHookIndex];
+    setActiveHookIndex((prev) => (prev + 1) % WITTY_HOOKS.length);
+
+    // 1. Try real browser Web Push Notification if supported
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'granted') {
+        new Notification(`FIN-X: ${hook.title}`, {
+          body: hook.body,
+          icon: '/favicon.ico'
+        });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            new Notification(`FIN-X: ${hook.title}`, {
+              body: hook.body,
+              icon: '/favicon.ico'
+            });
+          }
+        });
+      }
+    }
+
+    // 2. Also trigger in-app toast preview for immediate delight
+    if (onTriggerToast) {
+      onTriggerToast(hook);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email) return;
     setIsSubmitted(true);
-    setTimeout(() => {
-      // simulate success
-    }, 500);
   };
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="title-group">
-            <span className="bell-glow"><Bell size={18} /></span>
+            <span className="bell-badge">
+              <Bell size={18} />
+            </span>
             <div>
-              <h2 className="modal-title">Get Must-Know Finance Alerts</h2>
-              <span className="modal-sub">Zero spam. Only critical tax, policy & regulatory shifts.</span>
+              <h2 className="modal-title">FIN-X Witty Financial Alerts</h2>
+              <span className="modal-sub">Zero spam. Punchy, high-curiosity financial updates.</span>
             </div>
           </div>
           <button onClick={onClose} className="close-btn" title="Close">
@@ -58,17 +120,76 @@ export default function AlertsModal({ isOpen, onClose }) {
             <div className="success-icon">
               <Check size={28} />
             </div>
-            <h3>You are on the alert list!</h3>
+            <h3>Alert Schedule Confirmed!</h3>
             <p>
-              We’ve registered <strong>{email}</strong> for high-priority updates in <strong>{selectedDomains.join(', ')}</strong>. You will only be pinged when an official authority issues a critical change.
+              We’ve registered <strong>{email}</strong> for <strong>{frequency === '1x' ? '1× Evening Wrap (7 PM)' : '3× Daily Digest (7 AM, 1 PM, 7 PM)'}</strong> covering <strong>{selectedDomains.join(', ')}</strong>.
             </p>
             <button onClick={onClose} className="submit-btn" style={{ marginTop: '1rem' }}>
-              Done
+              Back to Digest
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="modal-body">
-            <div className="domains-section">
+            {/* Zomato / Swiggy-Style Hook Preview Carousel */}
+            <div className="witty-preview-box">
+              <div className="preview-top">
+                <span className="preview-tag">
+                  <Sparkles size={12} />
+                  <span>Swiggy/Zomato-Style Notification Preview</span>
+                </span>
+                <button 
+                  type="button" 
+                  onClick={handleTestNotification}
+                  className="test-notify-btn"
+                  title="Fire a test notification now"
+                >
+                  <Send size={11} />
+                  <span>Test Push</span>
+                </button>
+              </div>
+
+              <div className="preview-card">
+                <div className="phone-push-head">
+                  <div className="push-brand">
+                    <span className="mini-logo">FIN-X</span>
+                    <span className="push-time">Now</span>
+                  </div>
+                  <span className="push-category">{WITTY_HOOKS[activeHookIndex].tag}</span>
+                </div>
+                <div className="push-title">{WITTY_HOOKS[activeHookIndex].title}</div>
+                <div className="push-body">{WITTY_HOOKS[activeHookIndex].body}</div>
+              </div>
+            </div>
+
+            {/* Cadence Selection: 1x vs 3x daily */}
+            <div className="section-block">
+              <label className="section-label">
+                <Clock size={14} className="label-icon" />
+                <span>Choose Your Alert Cadence:</span>
+              </label>
+              <div className="frequency-toggle-group">
+                <button
+                  type="button"
+                  onClick={() => setFrequency('1x')}
+                  className={`frequency-btn ${frequency === '1x' ? 'active' : ''}`}
+                >
+                  <span className="freq-title">1× Daily Wrap</span>
+                  <span className="freq-desc">7:00 PM IST • Calm evening recap of everything important</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setFrequency('3x')}
+                  className={`frequency-btn ${frequency === '3x' ? 'active' : ''}`}
+                >
+                  <span className="freq-title">3× Daily Digest</span>
+                  <span className="freq-desc">7 AM, 1 PM, 7 PM • Morning Brief, Midday Pulse & Wrap</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Domain Selection */}
+            <div className="section-block">
               <label className="section-label">Select domains you care about:</label>
               <div className="domains-chips">
                 {DOMAINS.filter(d => d.id !== 'all').map((d) => {
@@ -88,8 +209,9 @@ export default function AlertsModal({ isOpen, onClose }) {
               </div>
             </div>
 
+            {/* Email Input */}
             <div className="input-group">
-              <label className="section-label">Email for morning dispatch:</label>
+              <label className="section-label">Your Email for the Digest:</label>
               <div className="input-wrapper">
                 <Mail size={16} className="input-icon" />
                 <input
@@ -103,33 +225,14 @@ export default function AlertsModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            <div className="auth-divider">
-              <span>OR CONNECT ACCOUNT</span>
-            </div>
-
-            {/* Google OAuth Option (Free Tier Supabase Auth Ready) */}
-            <button
-              type="button"
-              onClick={() => alert("Google OAuth will authenticate via Supabase Auth in Week 1 Phase")}
-              className="google-oauth-btn"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-              <span>Continue with Google</span>
-            </button>
-
             <button type="submit" className="submit-btn">
-              <span>Save Alert Preferences</span>
+              <span>Confirm Alert Preferences</span>
               <ArrowRight size={15} />
             </button>
 
             <div className="privacy-note">
               <Lock size={12} />
-              <span>We never sell data. You can unsubscribe or reconfigure anytime.</span>
+              <span>We never spam or sell data. Unsubscribe with 1 click anytime.</span>
             </div>
           </form>
         )}
@@ -139,7 +242,7 @@ export default function AlertsModal({ isOpen, onClose }) {
         .modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.75);
+          background: rgba(15, 23, 42, 0.45);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           display: flex;
@@ -151,15 +254,17 @@ export default function AlertsModal({ isOpen, onClose }) {
 
         .modal-card {
           width: 100%;
-          max-width: 480px;
-          background: #0d1320;
-          border: 1px solid var(--border-highlight);
+          max-width: 520px;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.95);
           border-radius: 16px;
-          padding: 1.5rem;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+          padding: 1.6rem;
+          box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.2rem;
+          max-height: 90vh;
+          overflow-y: auto;
         }
 
         .modal-header {
@@ -167,7 +272,7 @@ export default function AlertsModal({ isOpen, onClose }) {
           align-items: flex-start;
           justify-content: space-between;
           padding-bottom: 0.85rem;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .title-group {
@@ -176,38 +281,43 @@ export default function AlertsModal({ isOpen, onClose }) {
           gap: 0.75rem;
         }
 
-        .bell-glow {
+        .bell-badge {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 38px;
-          height: 38px;
+          width: 36px;
+          height: 36px;
           border-radius: 10px;
-          background: rgba(59, 130, 246, 0.15);
-          color: #60a5fa;
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563eb;
         }
 
         .modal-title {
-          font-size: 1.05rem;
-          font-weight: 700;
-          color: #ffffff;
+          font-size: 1.15rem;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.2;
         }
 
         .modal-sub {
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: #64748b;
         }
 
         .close-btn {
-          color: var(--text-muted);
-          padding: 4px;
+          width: 28px;
+          height: 28px;
           border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #64748b;
+          transition: all 0.15s ease;
         }
 
         .close-btn:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.1);
+          background: #f1f5f9;
+          color: #0f172a;
         }
 
         .modal-body {
@@ -216,12 +326,159 @@ export default function AlertsModal({ isOpen, onClose }) {
           gap: 1.15rem;
         }
 
-        .section-label {
-          display: block;
+        /* Witty Hook Preview Box */
+        .witty-preview-box {
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          border: 1px solid rgba(203, 213, 225, 0.8);
+          border-radius: 12px;
+          padding: 0.85rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+
+        .preview-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .preview-tag {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.68rem;
+          font-weight: 700;
+          color: #2563eb;
+          text-transform: uppercase;
+        }
+
+        .test-notify-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: #ffffff;
+          background: #2563eb;
+          padding: 0.2rem 0.55rem;
+          border-radius: 6px;
+          transition: all 0.15s ease;
+        }
+
+        .test-notify-btn:hover {
+          background: #1d4ed8;
+        }
+
+        .preview-card {
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 10px;
+          padding: 0.75rem 0.85rem;
+          box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+
+        .phone-push-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.65rem;
+        }
+
+        .push-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+
+        .mini-logo {
+          font-weight: 800;
+          color: #2563eb;
+        }
+
+        .push-time {
+          color: #94a3b8;
+        }
+
+        .push-category {
+          font-weight: 700;
+          color: #b45309;
+        }
+
+        .push-title {
+          font-size: 0.82rem;
+          font-weight: 800;
+          color: #0f172a;
+        }
+
+        .push-body {
           font-size: 0.75rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-          margin-bottom: 0.45rem;
+          color: #475569;
+          line-height: 1.4;
+        }
+
+        /* Cadence Frequency Toggles */
+        .section-block {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .section-label {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: #334155;
+        }
+
+        .label-icon {
+          color: #2563eb;
+        }
+
+        .frequency-toggle-group {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.6rem;
+        }
+
+        .frequency-btn {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          padding: 0.75rem;
+          border-radius: 10px;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          background: #ffffff;
+          text-align: left;
+          transition: all 0.18s ease;
+        }
+
+        .frequency-btn:hover {
+          border-color: #94a3b8;
+          background: #f8fafc;
+        }
+
+        .frequency-btn.active {
+          border-color: #2563eb;
+          background: rgba(37, 99, 235, 0.05);
+          box-shadow: 0 0 0 1px #2563eb;
+        }
+
+        .freq-title {
+          font-size: 0.82rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        .freq-desc {
+          font-size: 0.68rem;
+          color: #64748b;
+          line-height: 1.35;
         }
 
         .domains-chips {
@@ -231,108 +488,83 @@ export default function AlertsModal({ isOpen, onClose }) {
         }
 
         .domain-toggle {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          padding: 0.35rem 0.65rem;
+          gap: 0.3rem;
+          padding: 0.32rem 0.65rem;
           border-radius: 6px;
-          font-size: 0.74rem;
-          font-weight: 500;
-          color: var(--text-secondary);
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-subtle);
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #475569;
+          background: #f8fafc;
+          border: 1px solid rgba(226, 232, 240, 0.9);
           transition: all 0.15s ease;
         }
 
         .domain-toggle:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
+          background: #f1f5f9;
+          color: #0f172a;
         }
 
         .domain-toggle.selected {
-          background: rgba(59, 130, 246, 0.18);
-          border-color: rgba(59, 130, 246, 0.5);
-          color: #93c5fd;
-          font-weight: 600;
+          background: rgba(37, 99, 235, 0.08);
+          border-color: rgba(37, 99, 235, 0.3);
+          color: #2563eb;
+        }
+
+        .input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
         }
 
         .input-wrapper {
+          position: relative;
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: var(--bg-surface);
-          border: 1px solid var(--border-subtle);
-          border-radius: 8px;
-          padding: 0.55rem 0.85rem;
         }
 
         .input-icon {
-          color: var(--text-muted);
+          position: absolute;
+          left: 12px;
+          color: #94a3b8;
         }
 
         .email-input {
-          flex: 1;
-          background: transparent;
-          border: none;
-          color: #ffffff;
-          font-size: 0.85rem;
-          outline: none;
-        }
-
-        .auth-divider {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0.25rem 0;
-          position: relative;
-        }
-
-        .auth-divider span {
-          background: #0d1320;
-          padding: 0 0.5rem;
-          font-size: 0.65rem;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          color: var(--text-muted);
-        }
-
-        .google-oauth-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.65rem;
-          padding: 0.6rem;
+          width: 100%;
+          padding: 0.6rem 0.75rem 0.6rem 38px;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-subtle);
-          color: #ffffff;
-          font-size: 0.82rem;
-          font-weight: 600;
-          transition: all 0.15s ease;
+          border: 1px solid rgba(203, 213, 225, 0.9);
+          background: #ffffff;
+          font-size: 0.85rem;
+          color: #0f172a;
+          outline: none;
+          transition: border-color 0.15s ease;
         }
 
-        .google-oauth-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: rgba(255, 255, 255, 0.2);
+        .email-input:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         .submit-btn {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.45rem;
-          padding: 0.65rem;
-          border-radius: 8px;
+          gap: 0.5rem;
           background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
           color: #ffffff;
           font-size: 0.85rem;
           font-weight: 700;
-          transition: all 0.2s ease;
+          padding: 0.65rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+          transition: all 0.15s ease;
         }
 
         .submit-btn:hover {
+          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
           transform: translateY(-1px);
-          box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
         }
 
         .privacy-note {
@@ -340,8 +572,8 @@ export default function AlertsModal({ isOpen, onClose }) {
           align-items: center;
           justify-content: center;
           gap: 0.35rem;
-          font-size: 0.68rem;
-          color: var(--text-muted);
+          font-size: 0.7rem;
+          color: #94a3b8;
           text-align: center;
         }
 
@@ -350,32 +582,38 @@ export default function AlertsModal({ isOpen, onClose }) {
           flex-direction: column;
           align-items: center;
           text-align: center;
-          gap: 0.75rem;
-          padding: 1rem 0;
+          padding: 1.5rem 0;
+          gap: 0.65rem;
         }
 
         .success-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #d1fae5;
+          color: #047857;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 56px;
-          height: 56px;
-          border-radius: 50%;
-          background: rgba(16, 185, 129, 0.15);
-          color: #10b981;
-          border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .success-state h3 {
           font-size: 1.15rem;
-          color: #ffffff;
-          font-weight: 700;
+          font-weight: 800;
+          color: #0f172a;
         }
 
         .success-state p {
-          font-size: 0.8rem;
-          color: var(--text-secondary);
-          line-height: 1.5;
+          font-size: 0.85rem;
+          color: #475569;
+          line-height: 1.45;
+          max-width: 400px;
+        }
+
+        @media (max-width: 600px) {
+          .frequency-toggle-group {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
     </div>

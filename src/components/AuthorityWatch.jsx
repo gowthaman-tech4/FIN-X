@@ -9,7 +9,7 @@ export default function AuthorityWatch() {
     <div className="authority-widget glass-panel">
       <div className="widget-header">
         <div className="widget-title-group">
-          <ShieldCheck size={16} style={{ color: '#10b981' }} />
+          <ShieldCheck size={16} style={{ color: '#047857' }} />
           <h3 className="widget-title">Official Authority Watch</h3>
         </div>
         <span className="live-pill">
@@ -46,6 +46,9 @@ export default function AuthorityWatch() {
           display: flex;
           flex-direction: column;
           gap: 0.85rem;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 14px;
         }
 
         .widget-header {
@@ -53,7 +56,7 @@ export default function AuthorityWatch() {
           align-items: center;
           justify-content: space-between;
           padding-bottom: 0.65rem;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .widget-title-group {
@@ -65,7 +68,7 @@ export default function AuthorityWatch() {
         .widget-title {
           font-size: 0.85rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           letter-spacing: -0.01em;
         }
 
@@ -73,13 +76,13 @@ export default function AuthorityWatch() {
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(16, 185, 129, 0.12);
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          background: rgba(16, 185, 129, 0.1);
+          border: 1px solid rgba(16, 185, 129, 0.25);
           padding: 0.12rem 0.45rem;
           border-radius: 9999px;
           font-size: 0.65rem;
-          color: #10b981;
-          font-weight: 600;
+          color: #047857;
+          font-weight: 700;
         }
 
         .live-dot {
@@ -99,17 +102,17 @@ export default function AuthorityWatch() {
         .auth-card {
           display: flex;
           flex-direction: column;
-          gap: 0.35rem;
-          padding: 0.55rem 0.65rem;
+          gap: 0.3rem;
+          padding: 0.6rem;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: #f8fafc;
+          border: 1px solid rgba(226, 232, 240, 0.8);
           transition: all 0.15s ease;
         }
 
         .auth-card:hover {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(255, 255, 255, 0.12);
+          background: #f1f5f9;
+          border-color: rgba(203, 213, 225, 0.9);
         }
 
         .auth-top {
@@ -121,7 +124,7 @@ export default function AuthorityWatch() {
         .auth-name {
           font-size: 0.75rem;
           font-weight: 700;
-          color: #f1f5f9;
+          color: #0f172a;
         }
 
         .auth-flag {
@@ -133,23 +136,23 @@ export default function AuthorityWatch() {
           align-items: center;
           justify-content: space-between;
           font-size: 0.65rem;
-          color: var(--text-muted);
+          color: #64748b;
         }
 
         .auth-updates strong {
-          color: #38bdf8;
+          color: #2563eb;
         }
 
         .widget-footer {
           padding-top: 0.35rem;
-          border-top: 1px solid var(--border-subtle);
+          border-top: 1px solid rgba(241, 245, 249, 0.9);
           display: flex;
           justify-content: space-between;
         }
 
         .footer-tag {
           font-size: 0.68rem;
-          color: var(--text-muted);
+          color: #94a3b8;
         }
       `}</style>
     </div>

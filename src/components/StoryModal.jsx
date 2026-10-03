@@ -27,7 +27,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content glass-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         {/* Top Header */}
         <div className="modal-header">
           <div className="header-meta">
@@ -36,7 +36,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
               style={{
                 borderColor: domainObj.color,
                 color: domainObj.color,
-                background: `color-mix(in srgb, ${domainObj.color} 15%, transparent)`
+                background: `color-mix(in srgb, ${domainObj.color} 10%, transparent)`
               }}
             >
               {domainObj.label}
@@ -104,25 +104,23 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           </div>
         )}
 
-        {/* Actions & Original Link */}
+        {/* Actions Footer */}
         <div className="modal-footer">
-          <div className="footer-actions">
-            <button 
-              onClick={() => onToggleSave(story.id)}
-              className={`footer-btn ${isSaved ? 'saved' : ''}`}
-            >
-              <Bookmark size={15} fill={isSaved ? "currentColor" : "none"} />
-              <span>{isSaved ? "Bookmarked" : "Bookmark"}</span>
-            </button>
-          </div>
+          <button 
+            onClick={() => onToggleSave && onToggleSave(story.id)}
+            className={`action-btn ${isSaved ? 'saved' : ''}`}
+          >
+            <Bookmark size={15} />
+            <span>{isSaved ? 'Saved in Bookmarks' : 'Save Story'}</span>
+          </button>
 
           <a 
             href={story.source_url} 
             target="_blank" 
-            rel="noopener noreferrer" 
-            className="original-source-btn"
+            rel="noopener noreferrer"
+            className="official-link-btn"
           >
-            <span>Read full original story on {story.source_name}</span>
+            <span>Read Original Circular / Filing</span>
             <ExternalLink size={14} />
           </a>
         </div>
@@ -132,7 +130,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         .modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.78);
+          background: rgba(15, 23, 42, 0.45);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           display: flex;
@@ -145,14 +143,14 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         .modal-content {
           width: 100%;
           max-width: 620px;
-          background: #0d1320;
-          border: 1px solid var(--border-highlight);
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.95);
           border-radius: 16px;
-          padding: 1.6rem;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+          padding: 1.65rem;
+          box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.2rem;
           max-height: 90vh;
           overflow-y: auto;
         }
@@ -161,6 +159,8 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           display: flex;
           align-items: center;
           justify-content: space-between;
+          padding-bottom: 0.75rem;
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .header-meta {
@@ -171,59 +171,59 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         }
 
         .domain-pill {
-          font-size: 0.72rem;
+          padding: 0.15rem 0.5rem;
+          border-radius: 4px;
+          font-size: 0.68rem;
           font-weight: 700;
           text-transform: uppercase;
-          padding: 0.18rem 0.55rem;
-          border-radius: 6px;
           border: 1px solid;
         }
 
         .country-badge {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 0.18rem 0.5rem;
-          border-radius: 6px;
+          background: #f1f5f9;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+          padding: 0.15rem 0.45rem;
+          border-radius: 4px;
           font-size: 0.72rem;
-          color: var(--text-secondary);
+          color: #475569;
         }
 
         .official-badge {
           display: flex;
           align-items: center;
-          gap: 0.3rem;
-          background: rgba(16, 185, 129, 0.15);
-          color: #10b981;
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          font-size: 0.7rem;
-          font-weight: 600;
-          padding: 0.18rem 0.5rem;
-          border-radius: 6px;
+          gap: 0.25rem;
+          background: rgba(16, 185, 129, 0.1);
+          color: #047857;
+          border: 1px solid rgba(16, 185, 129, 0.25);
+          font-size: 0.68rem;
+          font-weight: 700;
+          padding: 0.15rem 0.45rem;
+          border-radius: 4px;
         }
 
         .close-btn {
-          color: var(--text-muted);
+          color: #64748b;
           padding: 4px;
           border-radius: 6px;
         }
 
         .close-btn:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.1);
+          color: #0f172a;
+          background: #f1f5f9;
         }
 
         .story-headline {
           font-size: 1.35rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           line-height: 1.35;
           letter-spacing: -0.02em;
         }
 
         .summary-box {
-          background: rgba(16, 23, 38, 0.95);
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          border-left: 4px solid var(--brand-primary);
+          background: #f8fafc;
+          border: 1px solid rgba(37, 99, 235, 0.25);
+          border-left: 4px solid #2563eb;
           padding: 1rem 1.15rem;
           border-radius: 10px;
           display: flex;
@@ -234,7 +234,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         .summary-title {
           font-size: 0.68rem;
           font-weight: 800;
-          color: #60a5fa;
+          color: #2563eb;
           letter-spacing: 0.05em;
         }
 
@@ -246,7 +246,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
 
         .line {
           font-size: 0.92rem;
-          color: #f1f5f9;
+          color: #1e293b;
           line-height: 1.5;
         }
 
@@ -254,8 +254,8 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 0.75rem;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-subtle);
+          background: #f8fafc;
+          border: 1px solid rgba(226, 232, 240, 0.8);
           padding: 0.85rem;
           border-radius: 10px;
         }
@@ -268,17 +268,17 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
 
         .label {
           font-size: 0.68rem;
-          color: var(--text-muted);
+          color: #64748b;
         }
 
         .value {
           font-size: 0.78rem;
-          color: var(--text-secondary);
+          color: #334155;
         }
 
         .value.bold {
-          color: #ffffff;
-          font-weight: 600;
+          color: #0f172a;
+          font-weight: 700;
         }
 
         .capitalize {
@@ -292,71 +292,66 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         }
 
         .tag-chip {
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          background: #f1f5f9;
+          border: 1px solid rgba(226, 232, 240, 0.8);
           padding: 0.2rem 0.5rem;
           border-radius: 4px;
           font-size: 0.7rem;
-          color: var(--text-muted);
+          color: #475569;
         }
 
         .modal-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 1rem;
           padding-top: 0.75rem;
-          border-top: 1px solid var(--border-subtle);
+          border-top: 1px solid rgba(241, 245, 249, 0.9);
           flex-wrap: wrap;
+          gap: 0.65rem;
         }
 
-        .footer-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
-
-        .footer-btn {
+        .action-btn {
           display: flex;
           align-items: center;
           gap: 0.4rem;
+          background: #f1f5f9;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          color: #334155;
+          font-size: 0.8rem;
+          font-weight: 600;
           padding: 0.5rem 0.85rem;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-subtle);
-          color: var(--text-secondary);
-          font-size: 0.78rem;
-          font-weight: 600;
           transition: all 0.15s ease;
         }
 
-        .footer-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
+        .action-btn:hover {
+          background: #e2e8f0;
+          color: #0f172a;
         }
 
-        .footer-btn.saved {
-          color: #f59e0b;
-          background: rgba(245, 158, 11, 0.15);
-          border-color: rgba(245, 158, 11, 0.3);
+        .action-btn.saved {
+          background: rgba(37, 99, 235, 0.08);
+          border-color: rgba(37, 99, 235, 0.3);
+          color: #2563eb;
         }
 
-        .original-source-btn {
-          display: inline-flex;
+        .official-link-btn {
+          display: flex;
           align-items: center;
-          gap: 0.45rem;
-          padding: 0.55rem 1.15rem;
-          border-radius: 8px;
+          gap: 0.4rem;
           background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
           color: #ffffff;
           font-size: 0.82rem;
           font-weight: 700;
-          box-shadow: 0 0 15px rgba(37, 99, 235, 0.35);
-          transition: all 0.2s ease;
+          padding: 0.55rem 1rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+          transition: all 0.15s ease;
         }
 
-        .original-source-btn:hover {
+        .official-link-btn:hover {
+          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
           transform: translateY(-1px);
-          box-shadow: 0 0 25px rgba(37, 99, 235, 0.6);
         }
       `}</style>
     </div>

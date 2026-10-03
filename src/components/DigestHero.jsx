@@ -12,6 +12,7 @@ import {
   Layers 
 } from 'lucide-react';
 import { DIGEST_SLOTS } from '../data/mockData';
+import AudioBriefPlayer from './AudioBriefPlayer';
 
 export default function DigestHero({
   activeDigest,
@@ -19,45 +20,79 @@ export default function DigestHero({
   activeFilter,
   onSelectFilter,
   totalStoriesCount,
-  officialCount
+  officialCount,
+  topStories = [],
+  onStorySelect
 }) {
   return (
     <section className="hero-banner">
       <div className="container">
-        <div className="hero-card glass-panel">
-          {/* Left Column: Digest Slot Status & Vision */}
-          <div className="hero-left">
-            <div className="digest-tabs">
+        <div className="hero-card">
+          {/* Top Row: Digest Slot Cadence & Filter Controls */}
+          <div className="hero-top-row">
+            <div className="digest-tabs" role="tablist" aria-label="Digest Cadence Slots">
               <button
                 onClick={() => onSelectDigest('morning')}
                 className={`digest-tab ${activeDigest === 'morning' ? 'active' : ''}`}
               >
-                <Sunrise size={15} />
-                <span>Morning (7 AM)</span>
+                <Sunrise size={14} className="tab-icon" />
+                <span>Morning Edition (7 AM IST)</span>
               </button>
               <button
                 onClick={() => onSelectDigest('afternoon')}
                 className={`digest-tab ${activeDigest === 'afternoon' ? 'active' : ''}`}
               >
-                <Sun size={15} />
-                <span>Afternoon (1 PM)</span>
+                <Sun size={14} className="tab-icon" />
+                <span>Midday Pulse (1 PM IST)</span>
               </button>
               <button
                 onClick={() => onSelectDigest('evening')}
                 className={`digest-tab ${activeDigest === 'evening' ? 'active' : ''}`}
               >
-                <Sunset size={15} />
-                <span>Evening (7 PM)</span>
+                <Sunset size={14} className="tab-icon" />
+                <span>Evening Wrap (7 PM IST)</span>
               </button>
             </div>
 
-            <h1 className="hero-heading">
-              Financial Intelligence, <span className="hero-gradient">Simplified.</span>
-            </h1>
+            <div className="filter-buttons">
+              <span className="filter-label">Stream:</span>
+              <button
+                onClick={() => onSelectFilter('all')}
+                className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
+              >
+                All Stories
+              </button>
+              <button
+                onClick={() => onSelectFilter('must_know')}
+                className={`filter-btn ${activeFilter === 'must_know' ? 'active' : ''}`}
+              >
+                <Flame size={12} style={{ color: '#ef4444' }} />
+                <span>Must-Know</span>
+              </button>
+              <button
+                onClick={() => onSelectFilter('official')}
+                className={`filter-btn ${activeFilter === 'official' ? 'active' : ''}`}
+              >
+                <ShieldCheck size={12} style={{ color: '#047857' }} />
+                <span>Official Only</span>
+              </button>
+            </div>
+          </div>
 
-            <p className="hero-subheading">
-              No noise, no clickbait, no finance jargon. Every major regulatory decision, tax amendment, and economic change summarized in 2 lines with direct links to official sources.
-            </p>
+          {/* Center: Editorial Heading & Value Proposition */}
+          <div className="hero-main-content">
+            <div className="hero-text-block">
+              <div className="edition-badge">
+                <span className="live-indicator" />
+                <span>FIN-X DAILY INTELLIGENCE DIGEST</span>
+              </div>
+              <h1 className="hero-heading">
+                The Financial World in <span className="hero-gradient">2 Concise Lines.</span>
+              </h1>
+              <p className="hero-subheading">
+                Zero clickbait, zero fluff. Every critical tax rule, central bank circular, and market shift summarized concisely with direct attribution to authoritative gazettes and regulators.
+              </p>
+            </div>
 
             {/* Metrics Chips */}
             <div className="metrics-row">
@@ -66,7 +101,7 @@ export default function DigestHero({
                 <span><strong>{totalStoriesCount}</strong> Stories in Digest</span>
               </div>
               <div className="metric-chip">
-                <ShieldCheck size={13} style={{ color: '#10b981' }} />
+                <ShieldCheck size={13} style={{ color: '#047857' }} />
                 <span><strong>{officialCount}</strong> Official (P0) Authorities</span>
               </div>
               <div className="metric-chip">
@@ -76,97 +111,69 @@ export default function DigestHero({
             </div>
           </div>
 
-          {/* Right Column: Quick Stream Filter Toggles */}
-          <div className="hero-right">
-            <div className="filter-panel">
-              <span className="filter-title">Filter View:</span>
-              <div className="filter-buttons">
-                <button
-                  onClick={() => onSelectFilter('all')}
-                  className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
-                >
-                  All Stories
-                </button>
-                <button
-                  onClick={() => onSelectFilter('must_know')}
-                  className={`filter-btn ${activeFilter === 'must_know' ? 'active' : ''}`}
-                >
-                  <Flame size={13} style={{ color: '#ef4444' }} />
-                  <span>Must-Know</span>
-                </button>
-                <button
-                  onClick={() => onSelectFilter('official')}
-                  className={`filter-btn ${activeFilter === 'official' ? 'active' : ''}`}
-                >
-                  <ShieldCheck size={13} style={{ color: '#38bdf8' }} />
-                  <span>Official Only</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="why-box">
-              <span className="why-tag">💡 Why FIN-X?</span>
-              <span className="why-text">
-                Instead of checking 10 government websites and news apps every morning, get the full picture here in 3 minutes.
-              </span>
-            </div>
-          </div>
+          {/* 60-Second Audio Brief Player Bar */}
+          {topStories.length > 0 && (
+            <AudioBriefPlayer stories={topStories} onStorySelect={onStorySelect} />
+          )}
         </div>
       </div>
 
       <style jsx>{`
         .hero-banner {
-          padding: 1.25rem 0 0.75rem 0;
+          padding: 1.5rem 0 1rem;
         }
 
         .hero-card {
+          background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 16px;
           padding: 1.5rem 1.75rem;
-          display: grid;
-          grid-template-columns: 1.6fr 1fr;
-          gap: 2rem;
-          align-items: center;
-          position: relative;
-          overflow: hidden;
-          background: linear-gradient(135deg, rgba(16, 23, 38, 0.85) 0%, rgba(12, 17, 28, 0.95) 100%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .hero-card::after {
-          content: '';
-          position: absolute;
-          top: -40%;
-          right: -10%;
-          width: 320px;
-          height: 320px;
-          background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .hero-left {
+          box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
           display: flex;
           flex-direction: column;
-          gap: 0.85rem;
+          gap: 1.25rem;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .hero-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #2563eb 0%, #8b5cf6 50%, #10b981 100%);
+        }
+
+        .hero-top-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .digest-tabs {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          background: rgba(0, 0, 0, 0.3);
-          border: 1px solid var(--border-subtle);
-          padding: 3px;
-          border-radius: 8px;
-          width: fit-content;
+          gap: 0.35rem;
+          background: #f1f5f9;
+          padding: 0.25rem;
+          border-radius: 9999px;
+          border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         .digest-tab {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          padding: 0.28rem 0.65rem;
-          border-radius: 6px;
-          font-size: 0.72rem;
-          font-weight: 500;
+          padding: 0.35rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 600;
           color: var(--text-secondary);
           transition: all 0.15s ease;
         }
@@ -176,140 +183,113 @@ export default function DigestHero({
         }
 
         .digest-tab.active {
-          background: rgba(59, 130, 246, 0.2);
-          border: 1px solid rgba(59, 130, 246, 0.4);
-          color: #60a5fa;
+          background: #ffffff;
+          color: #0f172a;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        }
+
+        .filter-buttons {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .filter-label {
+          font-size: 0.72rem;
+          color: var(--text-muted);
           font-weight: 600;
         }
 
-        .hero-heading {
-          font-size: 1.65rem;
-          font-weight: 800;
-          letter-spacing: -0.03em;
+        .filter-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0.32rem 0.65rem;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+          transition: all 0.15s ease;
+        }
+
+        .filter-btn:hover {
+          background: #f8fafc;
+          color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+          background: #0f172a;
           color: #ffffff;
-          line-height: 1.2;
+          border-color: #0f172a;
+        }
+
+        .hero-main-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
+        }
+
+        .edition-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          font-size: 0.7rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          color: #2563eb;
+          text-transform: uppercase;
+        }
+
+        .hero-heading {
+          font-size: 1.85rem;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.25;
+          letter-spacing: -0.025em;
         }
 
         .hero-gradient {
-          background: var(--brand-gradient);
+          background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
 
         .hero-subheading {
-          font-size: 0.85rem;
+          font-size: 0.92rem;
+          color: #475569;
           line-height: 1.5;
-          color: var(--text-secondary);
-          max-width: 580px;
+          max-width: 780px;
         }
 
         .metrics-row {
           display: flex;
+          align-items: center;
+          gap: 0.75rem;
           flex-wrap: wrap;
-          gap: 0.65rem;
           margin-top: 0.25rem;
         }
 
         .metric-chip {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          padding: 0.25rem 0.65rem;
-          border-radius: 6px;
-          font-size: 0.73rem;
-          color: var(--text-secondary);
-        }
-
-        .metric-chip strong {
-          color: var(--text-primary);
-        }
-
-        .hero-right {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          justify-content: center;
-          background: rgba(0, 0, 0, 0.25);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 1.15rem;
-          border-radius: 12px;
-        }
-
-        .filter-panel {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .filter-title {
-          font-size: 0.72rem;
-          font-weight: 600;
-          color: var(--text-muted);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .filter-buttons {
-          display: flex;
-          gap: 0.4rem;
-        }
-
-        .filter-btn {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           gap: 0.35rem;
-          padding: 0.4rem 0.65rem;
-          border-radius: 8px;
+          padding: 0.3rem 0.65rem;
+          border-radius: 6px;
+          background: #f1f5f9;
+          border: 1px solid rgba(226, 232, 240, 0.8);
           font-size: 0.75rem;
-          font-weight: 500;
-          color: var(--text-secondary);
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid var(--border-subtle);
-          transition: all 0.15s ease;
+          color: #334155;
         }
 
-        .filter-btn:hover {
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .filter-btn.active {
-          background: rgba(59, 130, 246, 0.18);
-          border-color: rgba(59, 130, 246, 0.5);
-          color: #93c5fd;
-          font-weight: 600;
-        }
-
-        .why-box {
-          display: flex;
-          flex-direction: column;
-          gap: 0.3rem;
-          background: rgba(245, 158, 11, 0.05);
-          border: 1px solid rgba(245, 158, 11, 0.2);
-          padding: 0.75rem;
-          border-radius: 8px;
-        }
-
-        .why-tag {
-          font-size: 0.7rem;
-          font-weight: 700;
-          color: #f59e0b;
-        }
-
-        .why-text {
-          font-size: 0.72rem;
-          line-height: 1.4;
-          color: var(--text-secondary);
-        }
-
-        @media (max-width: 900px) {
-          .hero-card {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
+        @media (max-width: 768px) {
+          .hero-heading {
+            font-size: 1.45rem;
+          }
+          .hero-top-row {
+            flex-direction: column;
+            align-items: flex-start;
           }
         }
       `}</style>

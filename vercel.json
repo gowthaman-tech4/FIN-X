@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/ingest?slot=morning",
+      "schedule": "30 1 * * *"
+    },
+    {
+      "path": "/api/ingest?slot=afternoon",
+      "schedule": "30 7 * * *"
+    },
+    {
+      "path": "/api/ingest?slot=evening",
+      "schedule": "30 13 * * *"
+    }
+  ]
+}

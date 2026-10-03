@@ -28,10 +28,10 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="title-group">
-            <ShieldCheck size={20} style={{ color: '#10b981' }} />
+            <ShieldCheck size={20} style={{ color: '#047857' }} />
             <div>
               <h2 className="modal-title">Source Registry & Attribution Directory</h2>
               <span className="modal-sub">17 Verified Official Authorities, Regulators & Media Outlets</span>
@@ -100,7 +100,7 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         .modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(15, 23, 42, 0.45);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           display: flex;
@@ -113,11 +113,11 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         .modal-card {
           width: 100%;
           max-width: 760px;
-          background: #0c111d;
-          border: 1px solid var(--border-highlight);
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.95);
           border-radius: 16px;
-          padding: 1.5rem;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+          padding: 1.6rem;
+          box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
           display: flex;
           flex-direction: column;
           gap: 1.15rem;
@@ -129,7 +129,7 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
           align-items: flex-start;
           justify-content: space-between;
           padding-bottom: 0.75rem;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .title-group {
@@ -140,31 +140,31 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
 
         .modal-title {
           font-size: 1.1rem;
-          font-weight: 700;
-          color: #ffffff;
+          font-weight: 800;
+          color: #0f172a;
         }
 
         .modal-sub {
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: #64748b;
         }
 
         .close-btn {
-          color: var(--text-muted);
+          color: #64748b;
           padding: 4px;
           border-radius: 6px;
         }
 
         .close-btn:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.1);
+          color: #0f172a;
+          background: #f1f5f9;
         }
 
         .registry-desc {
           font-size: 0.78rem;
           line-height: 1.45;
-          color: var(--text-secondary);
-          background: rgba(16, 185, 129, 0.05);
+          color: #334155;
+          background: rgba(16, 185, 129, 0.08);
           border: 1px solid rgba(16, 185, 129, 0.2);
           padding: 0.65rem 0.85rem;
           border-radius: 8px;
@@ -173,7 +173,7 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         .sources-table-wrapper {
           overflow-y: auto;
           max-height: 48vh;
-          border: 1px solid var(--border-subtle);
+          border: 1px solid rgba(226, 232, 240, 0.9);
           border-radius: 8px;
         }
 
@@ -185,27 +185,27 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         }
 
         .sources-table th {
-          background: rgba(255, 255, 255, 0.04);
+          background: #f8fafc;
           padding: 0.65rem 0.85rem;
-          color: var(--text-muted);
-          font-weight: 600;
+          color: #64748b;
+          font-weight: 700;
           text-transform: uppercase;
           font-size: 0.68rem;
           letter-spacing: 0.04em;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(226, 232, 240, 0.9);
           position: sticky;
           top: 0;
           backdrop-filter: blur(8px);
         }
 
         .sources-table td {
-          padding: 0.65rem 0.85rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-          color: var(--text-secondary);
+          padding: 0.75rem 0.85rem;
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+          color: #334155;
         }
 
         .sources-table tr:hover td {
-          background: rgba(255, 255, 255, 0.02);
+          background: #f8fafc;
         }
 
         .source-name-cell {
@@ -215,60 +215,74 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         }
 
         .source-name-cell strong {
-          color: #ffffff;
+          color: #0f172a;
+          font-weight: 700;
         }
 
         .source-type-sub {
-          font-size: 0.68rem;
-          color: var(--text-muted);
+          font-size: 0.7rem;
+          color: #64748b;
         }
 
         .region-chip {
-          font-size: 0.75rem;
+          display: inline-block;
+          background: #f1f5f9;
+          padding: 0.15rem 0.45rem;
+          border-radius: 4px;
+          font-size: 0.72rem;
+          font-weight: 600;
         }
 
         .level-pill {
-          font-size: 0.65rem;
-          font-weight: 700;
-          padding: 0.1rem 0.4rem;
+          display: inline-block;
+          padding: 0.15rem 0.45rem;
           border-radius: 4px;
+          font-size: 0.68rem;
+          font-weight: 700;
         }
 
         .level-pill.p0 {
-          background: rgba(16, 185, 129, 0.15);
-          color: #10b981;
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          background: rgba(16, 185, 129, 0.1);
+          color: #047857;
+          border: 1px solid rgba(16, 185, 129, 0.25);
         }
 
         .level-pill.p1 {
-          background: rgba(59, 130, 246, 0.15);
-          color: #60a5fa;
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563eb;
+          border: 1px solid rgba(37, 99, 235, 0.25);
         }
 
         .level-pill.p3 {
-          background: rgba(100, 116, 139, 0.15);
-          color: #94a3b8;
+          background: rgba(100, 116, 139, 0.1);
+          color: #64748b;
         }
 
         .method-cell {
+          color: #64748b;
+          font-family: var(--font-mono);
           font-size: 0.72rem;
-          color: var(--text-muted);
         }
 
         .trust-cell {
           font-weight: 700;
-          color: #10b981;
+          color: #047857;
         }
 
         .external-source-link {
-          color: var(--text-muted);
+          color: #2563eb;
           display: inline-flex;
           align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 4px;
+          transition: all 0.15s ease;
         }
 
         .external-source-link:hover {
-          color: #38bdf8;
+          background: rgba(37, 99, 235, 0.08);
+          color: #1d4ed8;
         }
 
         .modal-footer {
@@ -276,26 +290,27 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
           align-items: center;
           justify-content: space-between;
           padding-top: 0.75rem;
-          border-top: 1px solid var(--border-subtle);
+          border-top: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .footer-info {
           font-size: 0.72rem;
-          color: var(--text-muted);
+          color: #64748b;
         }
 
         .btn-close-action {
-          padding: 0.45rem 1rem;
-          border-radius: 8px;
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-          font-size: 0.8rem;
+          padding: 0.45rem 0.95rem;
+          background: #f1f5f9;
+          color: #334155;
+          font-size: 0.78rem;
           font-weight: 600;
+          border-radius: 6px;
           transition: all 0.15s ease;
         }
 
         .btn-close-action:hover {
-          background: rgba(255, 255, 255, 0.15);
+          background: #e2e8f0;
+          color: #0f172a;
         }
       `}</style>
     </div>

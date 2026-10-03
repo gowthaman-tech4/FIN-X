@@ -5,7 +5,6 @@ import { Calendar, ExternalLink, Clock, ChevronRight } from 'lucide-react';
 import { CALENDAR_EVENTS } from '../data/mockData';
 
 export default function CalendarWidget({ selectedCountry }) {
-  // Filter events based on selected country
   const filteredEvents = selectedCountry === 'ALL'
     ? CALENDAR_EVENTS
     : CALENDAR_EVENTS.filter(e => e.country === selectedCountry || e.country === 'GLOBAL');
@@ -14,8 +13,8 @@ export default function CalendarWidget({ selectedCountry }) {
     <div className="calendar-widget glass-panel">
       <div className="widget-header">
         <div className="widget-title-group">
-          <Calendar size={16} className="text-primary" />
-          <h3 className="widget-title">Upcoming Finance Calendar</h3>
+          <Calendar size={16} style={{ color: '#2563eb' }} />
+          <h3 className="widget-title">Finance Calendar</h3>
         </div>
         <span className="event-count">{filteredEvents.length} events</span>
       </div>
@@ -60,7 +59,7 @@ export default function CalendarWidget({ selectedCountry }) {
       </div>
 
       <div className="widget-footer">
-        <span className="footer-note">Official regulatory & tax calendar</span>
+        <span className="footer-note">Official tax filings & central bank meetings</span>
       </div>
 
       <style jsx>{`
@@ -69,6 +68,9 @@ export default function CalendarWidget({ selectedCountry }) {
           display: flex;
           flex-direction: column;
           gap: 0.95rem;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 14px;
         }
 
         .widget-header {
@@ -76,7 +78,7 @@ export default function CalendarWidget({ selectedCountry }) {
           align-items: center;
           justify-content: space-between;
           padding-bottom: 0.65rem;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .widget-title-group {
@@ -88,22 +90,23 @@ export default function CalendarWidget({ selectedCountry }) {
         .widget-title {
           font-size: 0.85rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           letter-spacing: -0.01em;
         }
 
         .event-count {
           font-size: 0.68rem;
-          color: var(--text-muted);
-          background: rgba(255, 255, 255, 0.05);
+          color: #64748b;
+          background: #f1f5f9;
           padding: 0.15rem 0.45rem;
           border-radius: 9999px;
+          font-weight: 600;
         }
 
         .events-list {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.65rem;
         }
 
         .event-item {
@@ -112,14 +115,14 @@ export default function CalendarWidget({ selectedCountry }) {
           gap: 0.75rem;
           padding: 0.65rem;
           border-radius: 8px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.04);
+          background: #f8fafc;
+          border: 1px solid rgba(226, 232, 240, 0.8);
           transition: all 0.15s ease;
         }
 
         .event-item:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.1);
+          background: #f1f5f9;
+          border-color: rgba(203, 213, 225, 0.9);
         }
 
         .date-badge {
@@ -127,11 +130,11 @@ export default function CalendarWidget({ selectedCountry }) {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          width: 42px;
-          height: 42px;
+          width: 40px;
+          height: 40px;
           border-radius: 8px;
-          background: rgba(59, 130, 246, 0.12);
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(37, 99, 235, 0.08);
+          border: 1px solid rgba(37, 99, 235, 0.2);
           flex-shrink: 0;
         }
 
@@ -139,67 +142,67 @@ export default function CalendarWidget({ selectedCountry }) {
           font-size: 0.6rem;
           font-weight: 700;
           text-transform: uppercase;
-          color: #60a5fa;
+          color: #2563eb;
           line-height: 1;
         }
 
         .date-day {
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           line-height: 1.1;
         }
 
         .event-details {
           display: flex;
           flex-direction: column;
-          gap: 0.25rem;
+          gap: 0.2rem;
           flex: 1;
         }
 
         .event-top {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          gap: 0.4rem;
         }
 
         .event-tag {
-          font-size: 0.65rem;
+          font-size: 0.62rem;
           font-weight: 700;
           text-transform: uppercase;
-          padding: 0.1rem 0.4rem;
+          padding: 0.1rem 0.35rem;
           border-radius: 4px;
         }
 
         .tax-tag {
-          background: rgba(245, 158, 11, 0.15);
-          color: #f59e0b;
+          background: rgba(245, 158, 11, 0.1);
+          color: #b45309;
         }
 
         .reg-tag {
-          background: rgba(139, 92, 246, 0.15);
-          color: #a78bfa;
+          background: rgba(139, 92, 246, 0.1);
+          color: #6d28d9;
         }
 
         .econ-tag {
-          background: rgba(6, 182, 212, 0.15);
-          color: #22d3ee;
+          background: rgba(6, 182, 212, 0.1);
+          color: #0e7490;
         }
 
         .event-country {
-          font-size: 0.8rem;
+          font-size: 0.72rem;
         }
 
         .event-title {
           font-size: 0.78rem;
           font-weight: 600;
-          color: #e2e8f0;
-          line-height: 1.3;
+          color: #1e293b;
+          line-height: 1.35;
           transition: color 0.15s ease;
         }
 
         .event-title:hover {
-          color: #38bdf8;
+          color: #2563eb;
         }
 
         .event-meta {
@@ -207,20 +210,18 @@ export default function CalendarWidget({ selectedCountry }) {
           align-items: center;
           gap: 0.3rem;
           font-size: 0.68rem;
-          color: var(--text-muted);
+          color: #64748b;
         }
 
         .widget-footer {
-          padding-top: 0.35rem;
-          border-top: 1px solid var(--border-subtle);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+          padding-top: 0.45rem;
+          border-top: 1px solid rgba(241, 245, 249, 0.9);
+          text-align: center;
         }
 
         .footer-note {
           font-size: 0.68rem;
-          color: var(--text-muted);
+          color: #94a3b8;
         }
       `}</style>
     </div>

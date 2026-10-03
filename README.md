@@ -15,33 +15,41 @@
    - 🏦 **Banking & Money**: Lending rates, NPAs, deposit insurance, and payments fintech.
    - 💼 **Policy & Trade**: Bilateral trade corridors, export tariffs, and government subsidies.
 
-2. **Strict 2-Line AI Summaries**:
+2. **Strict 2-Line AI Summaries (Our 24/7 AI Journalist)**:
    - No 2,000-word articles or clickbait opinions.
-   - **Line 1**: What event, circular, or rule change occurred.
+   - **Line 1**: What official circular, rule change, or economic event occurred.
    - **Line 2**: Who is affected and the practical impact.
 
-3. **100% Attribution Transparency**:
-   - Every single story links directly to the authoritative official circular or media publication.
-   - Transparent Source Registry of 17 curated P0 official bodies and trusted media feeds.
+3. **🎧 60-Second Audio Brief ("Listen to Today's Digest")**:
+   - Commute-friendly audio briefing powered by native browser Web Speech synthesis.
+   - Play/pause, speed controls (1.0×, 1.25×, 1.5×), and animated soundwave equalizer.
+   - ₹0 cost, zero backend latency.
 
-4. **Calm 3× Daily Digest Model**:
-   - Morning Brief (7:00 AM IST) • Midday Pulse (1:00 PM IST) • Evening Wrap (7:00 PM IST).
-   - No continuous panic-scrolling ticker.
+4. **⭐ Personalized "My Focus" Domain Tabs**:
+   - Pin favorite domains (e.g., Tax & GST + Regulations for a CA, Markets + Economy for a trader).
+   - 1-click audience presets saved to `localStorage`.
 
-5. **Upcoming Financial Calendar**:
-   - Advance Tax deadlines, RBI MPC rate decisions, US FOMC meetings, and CPI release dates.
+5. **🔔 Swiggy / Zomato-Style Witty Notifications**:
+   - High-curiosity, punchy financial alerts based on the day's actual biggest news.
+   - Flexible cadence: **1× Daily Wrap (7:00 PM)** or **3× Daily Digest (7 AM, 1 PM, 7 PM)**.
+   - Built-in test trigger for web push notifications.
+
+6. **100% Attribution Transparency**:
+   - Every single story links directly to the authoritative official circular (RBI, SEBI, CBDT, Fed gazettes).
+   - Curated directory of 17 verified P0 official bodies and trusted media feeds.
 
 ---
 
-## 🏗 ₹0 Free-Tier Tech Stack
+## 🏗 ₹0 Free-Tier Tech Stack (100% Unified Next.js)
 
-| Component | Technology | Cost |
-|---|---|---|
-| **Frontend** | Next.js 16 (App Router) + Vanilla CSS Design Tokens | ₹0 (Cloudflare Pages) |
-| **Backend API** | FastAPI (Python 3.13) + Uvicorn | ₹0 (Render Free / Local) |
-| **Database** | Supabase PostgreSQL + Auth | ₹0 (Supabase Free Tier) |
-| **AI Summarization** | Google Gemini API (`gemini-2.5-flash`) | ₹0 (Free Tier Quota) |
-| **Icons & Design** | Lucide React + Glassmorphism Dark Mode | Open Source |
+| Component | Technology | Cost | Hosting |
+|---|---|---|---|
+| **Full-Stack App** | Next.js 16 (App Router) + React 19 | ₹0 | Vercel Free Tier |
+| **Ingestion Pipeline** | Serverless API Route (`/api/ingest`) | ₹0 | Vercel Serverless / Crons |
+| **Automated Scheduler** | Vercel Cron (`vercel.json`) | ₹0 | 7:00 AM, 1:00 PM, 7:00 PM IST |
+| **AI Journalist** | Google Gemini API (`gemini-2.5-flash`) | ₹0 | Google AI Studio Free Tier |
+| **Database** | Supabase PostgreSQL | ₹0 | Supabase Free Tier |
+| **Audio Synthesis** | Native Web Speech API | ₹0 | Browser Native (Offline Ready) |
 
 ---
 
@@ -51,65 +59,61 @@
 FIN_X/
 ├── src/
 │   ├── app/
-│   │   ├── globals.css         # Complete obsidian dark design system & tokens
-│   │   ├── layout.js           # SEO tags, viewport, preconnect fonts
-│   │   └── page.js             # Main interactive dashboard with dynamic filtering
+│   │   ├── api/
+│   │   │   ├── stories/route.js    # Serves stories with Supabase pooling & fallback
+│   │   │   ├── ingest/route.js     # Native RSS crawling & Gemini AI summarization
+│   │   │   └── notifications/route.js # Dynamic witty notification hooks
+│   │   ├── globals.css             # Classic light editorial theme & rich gradients
+│   │   ├── layout.js               # Metadata, viewport, fonts
+│   │   └── page.js                 # Dashboard with audio player, pinning & toast alerts
 │   ├── components/
-│   │   ├── Header.jsx          # Live digest status, search, country switcher, alerts
-│   │   ├── DomainNav.jsx       # Horizontal domain selector with dynamic color glows
-│   │   ├── DigestHero.jsx      # 3x daily slot switcher, metrics chips & stream filters
-│   │   ├── TopStories.jsx      # "Today's Essential Brief" - Top 5 must-know stories
-│   │   ├── NewsCard.jsx        # Signature FIN-X news card with 2-line AI summary
-│   │   ├── CalendarWidget.jsx  # Upcoming tax deadlines & central bank meetings
-│   │   ├── AuthorityWatch.jsx  # Live monitor of CBDT, CBIC, RBI, SEBI, Fed, SEC
-│   │   ├── ScheduleWidget.jsx  # Explanation of 3x daily digest cadence
-│   │   ├── StoryModal.jsx      # Story deep-dive modal with tags & circular link
-│   │   ├── AlertsModal.jsx     # Preference selector for domain alerts
+│   │   ├── AudioBriefPlayer.jsx    # 60-second audio player with animated equalizer bars
+│   │   ├── Header.jsx              # Nav, search, country switcher & alerts modal trigger
+│   │   ├── DomainNav.jsx           # Domain tabs with "My Focus" pinning & presets
+│   │   ├── DigestHero.jsx          # Slot cadence switcher & audio player embed
+│   │   ├── TopStories.jsx          # "Today's Essential Brief" - Top 5 must-know cards
+│   │   ├── NewsCard.jsx            # Signature card with 2-line summary & official link
+│   │   ├── CalendarWidget.jsx      # Upcoming tax deadlines & rate decision meetings
+│   │   ├── AuthorityWatch.jsx      # Live monitor of CBDT, CBIC, RBI, SEBI, Fed, SEC
+│   │   ├── ScheduleWidget.jsx      # 3x daily cadence timer
+│   │   ├── StoryModal.jsx          # Deep-dive story modal with circular links
+│   │   ├── AlertsModal.jsx         # Swiggy/Zomato style notifications & frequency selector
 │   │   └── SourceRegistryModal.jsx # Attribution directory for 17 verified sources
-│   └── data/
-│       └── mockData.js         # Curated realistic multi-domain dataset
-├── backend/
-│   ├── adapters/
-│   │   ├── base.py             # Abstract adapter & RawItem model
-│   │   ├── rss_adapter.py      # RSS collector (RBI, Fed, SEC, ET, Mint, Reuters)
-│   │   ├── web_adapter.py      # Web scraper for official circulars (CBDT, CBIC, SEBI)
-│   │   └── gdelt_adapter.py    # GDELT 2.0 API global discovery adapter
-│   ├── ai/
-│   │   ├── prompts.py          # Gemini system & extraction prompts
-│   │   └── gemini_processor.py # AI relevance filter, classifier & 2-line summarizer
-│   ├── main.py                 # FastAPI application
-│   └── requirements.txt        # Backend dependencies
+│   ├── data/
+│   │   └── mockData.js             # Realistic multi-domain initial dataset
+│   └── lib/
+│       └── gemini.js               # Native Gemini AI processor & witty notification generator
 ├── database/
-│   ├── schema.sql              # Supabase PostgreSQL tables & indexes
-│   ├── seed_sources.sql        # 17 official & media sources registry
-│   ├── seed_sample_stories.sql # Curated high-impact initial stories
-│   └── seed_calendar.sql       # Upcoming tax deadlines & rate decision dates
-└── package.json
+│   ├── schema.sql                  # Supabase PostgreSQL tables & indexes
+│   ├── seed_sources.sql            # 17 official & media sources registry
+│   ├── seed_sample_stories.sql     # Curated initial stories
+│   └── seed_calendar.sql           # Tax deadlines & central bank meetings
+├── vercel.json                     # 3x daily automated ingestion cron schedule
+├── package.json
+└── README.md
 ```
 
 ---
 
 ## 🚦 Getting Started Locally
 
-### 1. Frontend (Next.js)
+### 1. Run the Next.js App
 ```bash
-# Install dependencies (already installed)
 npm install
-
-# Run the dev server
 npm run dev
-
-# Open http://localhost:3000 in your browser
 ```
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
-### 2. Backend (FastAPI)
+### 2. (Optional) Run Live AI Ingestion Manually
+To trigger a live crawl and AI distillation run into your Supabase database:
 ```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+curl -X POST http://localhost:3000/api/ingest?slot=morning
 ```
 
-### 3. Database (Supabase)
-1. Create a free project at [supabase.com](https://supabase.com).
-2. Run `database/schema.sql` in the Supabase SQL Editor.
-3. Run `database/seed_sources.sql`, `database/seed_sample_stories.sql`, and `database/seed_calendar.sql`.
+### 3. Deploy to Vercel (100% Free)
+1. Push this repository to your GitHub.
+2. Import the project into [Vercel](https://vercel.com).
+3. Add your environment variables in Vercel Project Settings:
+   - `DATABASE_URL` (from Supabase)
+   - `GEMINI_API_KEY` (from Google AI Studio)
+4. Deploy! Vercel Cron will automatically trigger `/api/ingest` at 7:00 AM, 1:00 PM, and 7:00 PM IST.

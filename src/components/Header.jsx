@@ -10,7 +10,8 @@ import {
   Check, 
   Sparkles,
   ShieldCheck,
-  Globe
+  Globe,
+  Bookmark
 } from 'lucide-react';
 import { COUNTRIES } from '../data/mockData';
 
@@ -34,14 +35,13 @@ export default function Header({
           <div className="live-status">
             <span className="live-indicator" />
             <span className="live-slot-text">
-              <strong>Morning Digest</strong> • Active Edition (7:00 AM IST)
+              <strong>Morning Edition</strong> (7:00 AM IST) • Active Continuous Digest
             </span>
-            <span className="live-badge">Live Discovery</span>
           </div>
 
           <div className="top-banner-right">
-            <span className="text-secondary text-xs">
-              ⚡ ₹0 Aggregation Pipeline • 17 Verified Sources
+            <span className="source-counter-text">
+              ⚡ 17 Official Authorities & Media Feeds • 100% Attribution
             </span>
           </div>
         </div>
@@ -52,20 +52,19 @@ export default function Header({
           <div className="brand-group">
             <div className="logo-box">
               <span className="logo-text">FIN<span className="logo-accent">-X</span></span>
-              <span className="logo-dot" />
             </div>
             <div className="brand-meta">
-              <span className="brand-title">Your Global Finance Digest</span>
-              <span className="brand-sub">Discover • Understand in 2 Lines • Original Sources</span>
+              <span className="brand-title">Global Financial Digest</span>
+              <span className="brand-sub">2-Line Executive Intelligence • Official Sources</span>
             </div>
           </div>
 
           {/* Search Bar */}
           <div className={`search-container ${isSearchFocused ? 'focused' : ''}`}>
-            <Search className="search-icon" size={17} />
+            <Search className="search-icon" size={16} />
             <input 
               type="text" 
-              placeholder="Search tax rules, RBI, SEBI, Fed, stocks..." 
+              placeholder="Search tax circulars, RBI, SEBI, Fed, stocks..." 
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
@@ -107,7 +106,7 @@ export default function Header({
               className={`icon-btn ${showOnlySaved ? 'active-pill' : ''}`}
               title="Saved Stories"
             >
-              <span>🔖</span>
+              <Bookmark size={15} />
               {savedStoriesCount > 0 && (
                 <span className="badge-count">{savedStoriesCount}</span>
               )}
@@ -117,7 +116,7 @@ export default function Header({
             <button 
               onClick={onOpenAlerts} 
               className="btn-primary-glow"
-              title="Get Must-Know Alerts"
+              title="Get Witty Finance Alerts"
             >
               <Bell size={15} />
               <span className="hide-on-mobile">Get Alerts</span>
@@ -129,12 +128,13 @@ export default function Header({
       <style jsx>{`
         .header-wrapper {
           border-bottom: 1px solid var(--border-subtle);
-          background: rgba(6, 9, 14, 0.85);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
+          background: rgba(255, 255, 255, 0.96);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           position: sticky;
           top: 0;
           z-index: 100;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
         }
 
         .top-banner {
@@ -142,8 +142,8 @@ export default function Header({
           align-items: center;
           justify-content: space-between;
           padding: 0.35rem 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-          font-size: 0.75rem;
+          border-bottom: 1px solid rgba(241, 245, 249, 0.95);
+          font-size: 0.73rem;
         }
 
         .live-status {
@@ -153,23 +153,13 @@ export default function Header({
           color: var(--text-secondary);
         }
 
-        .live-slot-text {
-          color: var(--text-primary);
+        .live-slot-text strong {
+          color: #0f172a;
         }
 
-        .live-badge {
-          background: rgba(16, 185, 129, 0.15);
-          color: #10b981;
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          font-size: 0.65rem;
-          padding: 0.1rem 0.4rem;
-          border-radius: 9999px;
-          font-weight: 600;
-          text-transform: uppercase;
-        }
-
-        .top-banner-right {
-          color: var(--text-muted);
+        .source-counter-text {
+          color: #64748b;
+          font-weight: 500;
         }
 
         .nav-row {
@@ -177,7 +167,7 @@ export default function Header({
           align-items: center;
           justify-content: space-between;
           gap: 1.25rem;
-          padding: 0.85rem 0;
+          padding: 0.75rem 0;
         }
 
         .brand-group {
@@ -188,129 +178,117 @@ export default function Header({
         }
 
         .logo-box {
-          position: relative;
           display: flex;
-          align-items: baseline;
+          align-items: center;
         }
 
         .logo-text {
-          font-size: 1.7rem;
-          font-weight: 800;
+          font-size: 1.45rem;
+          font-weight: 900;
+          color: #0f172a;
           letter-spacing: -0.04em;
-          color: #ffffff;
-          line-height: 1;
         }
 
         .logo-accent {
-          background: var(--brand-gradient);
+          background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-        }
-
-        .logo-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #38bdf8;
-          display: inline-block;
-          margin-left: 2px;
-          box-shadow: 0 0 10px #38bdf8;
         }
 
         .brand-meta {
           display: flex;
           flex-direction: column;
+          border-left: 1px solid rgba(226, 232, 240, 0.9);
+          padding-left: 0.85rem;
         }
 
         .brand-title {
-          font-size: 0.85rem;
+          font-size: 0.8rem;
           font-weight: 700;
-          color: var(--text-primary);
-          line-height: 1.1;
+          color: #0f172a;
+          line-height: 1.2;
         }
 
         .brand-sub {
           font-size: 0.68rem;
           color: var(--text-muted);
-          margin-top: 1px;
         }
 
+        /* Search Container */
         .search-container {
           flex: 1;
           max-width: 440px;
           position: relative;
           display: flex;
           align-items: center;
-          background: var(--bg-surface);
-          border: 1px solid var(--border-subtle);
-          border-radius: 10px;
-          padding: 0.45rem 0.85rem;
+          background: #f8fafc;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 9999px;
+          padding: 0 0.85rem;
           transition: all 0.2s ease;
         }
 
         .search-container.focused {
-          border-color: var(--brand-primary);
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-          background: var(--bg-card);
+          background: #ffffff;
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
         .search-icon {
-          color: var(--text-muted);
+          color: #94a3b8;
           margin-right: 0.5rem;
           flex-shrink: 0;
         }
 
         .search-input {
-          flex: 1;
+          width: 100%;
+          height: 38px;
           background: transparent;
           border: none;
-          color: var(--text-primary);
-          font-size: 0.85rem;
+          color: #0f172a;
+          font-size: 0.82rem;
           outline: none;
-          width: 100%;
         }
 
         .search-input::placeholder {
-          color: var(--text-muted);
+          color: #94a3b8;
         }
 
         .clear-search-btn {
-          color: var(--text-muted);
+          color: #94a3b8;
           display: flex;
           align-items: center;
-          justify-content: center;
           padding: 2px;
-          border-radius: 4px;
+          border-radius: 50%;
         }
 
         .clear-search-btn:hover {
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.1);
+          color: #0f172a;
         }
 
+        /* Controls Group */
         .controls-group {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.65rem;
         }
 
         .country-switch {
-          display: flex;
-          background: var(--bg-surface);
-          border: 1px solid var(--border-subtle);
-          padding: 3px;
+          display: inline-flex;
+          background: #f1f5f9;
+          border: 1px solid rgba(226, 232, 240, 0.9);
           border-radius: 8px;
-          gap: 2px;
+          padding: 2px;
         }
 
         .country-btn {
           display: flex;
           align-items: center;
-          gap: 0.35rem;
-          padding: 0.3rem 0.6rem;
+          gap: 0.3rem;
+          padding: 0.32rem 0.65rem;
           border-radius: 6px;
           font-size: 0.75rem;
-          font-weight: 500;
+          font-weight: 600;
           color: var(--text-secondary);
           transition: all 0.15s ease;
         }
@@ -320,86 +298,79 @@ export default function Header({
         }
 
         .country-btn.active {
-          background: rgba(255, 255, 255, 0.12);
-          color: #ffffff;
-          font-weight: 600;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .country-flag {
-          font-size: 0.95rem;
+          background: #ffffff;
+          color: #0f172a;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
         }
 
         .icon-btn {
-          position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
           width: 36px;
           height: 36px;
           border-radius: 8px;
-          background: var(--bg-surface);
-          border: 1px solid var(--border-subtle);
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
           color: var(--text-secondary);
+          position: relative;
           transition: all 0.15s ease;
         }
 
         .icon-btn:hover {
-          border-color: var(--border-highlight);
           color: var(--text-primary);
+          background: #f8fafc;
         }
 
         .icon-btn.active-pill {
-          background: rgba(59, 130, 246, 0.2);
-          border-color: var(--brand-primary);
+          background: rgba(37, 99, 235, 0.08);
+          border-color: #2563eb;
+          color: #2563eb;
         }
 
         .badge-count {
           position: absolute;
           top: -4px;
           right: -4px;
-          background: var(--brand-primary);
-          color: white;
-          font-size: 0.65rem;
-          font-weight: 700;
-          border-radius: 9999px;
+          background: #2563eb;
+          color: #ffffff;
+          font-size: 0.62rem;
+          font-weight: 800;
           padding: 1px 5px;
-          line-height: 1;
+          border-radius: 9999px;
         }
 
         .btn-primary-glow {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 0.45rem;
           background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-          color: white;
-          font-size: 0.8rem;
-          font-weight: 600;
+          color: #ffffff;
+          font-size: 0.78rem;
+          font-weight: 700;
           padding: 0.45rem 0.95rem;
           border-radius: 8px;
-          box-shadow: 0 0 15px rgba(37, 99, 235, 0.35);
-          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+          transition: all 0.18s ease;
         }
 
         .btn-primary-glow:hover {
-          box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
           transform: translateY(-1px);
         }
 
         @media (max-width: 900px) {
-          .brand-sub, .hide-on-mobile, .top-banner-right {
+          .brand-meta {
             display: none;
-          }
-          .search-container {
-            max-width: 240px;
           }
         }
 
-        @media (max-width: 640px) {
-          .country-label {
+        @media (max-width: 680px) {
+          .hide-on-mobile {
             display: none;
           }
-          .search-container {
+          .country-label {
             display: none;
           }
         }

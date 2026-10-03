@@ -23,7 +23,9 @@ import {
   ExternalLink,
   Flame,
   CheckCircle2,
-  Calendar
+  Calendar,
+  X,
+  Bell
 } from 'lucide-react';
 
 export default function Home() {
@@ -39,6 +41,8 @@ export default function Home() {
   const [isSourceRegistryOpen, setIsSourceRegistryOpen] = useState(false);
   const [allStories, setAllStories] = useState(INITIAL_STORIES);
   const [isLiveDB, setIsLiveDB] = useState(false);
+  const [pinnedDomains, setPinnedDomains] = useState(['tax', 'regulations']);
+  const [activeToast, setActiveToast] = useState(null);
 
   // Fetch live stories from Supabase database via /api/stories
   useEffect(() => {
@@ -61,12 +65,16 @@ export default function Home() {
     loadLiveStories();
   }, []);
 
-  // Load saved bookmarks from localStorage on mount
+  // Load saved bookmarks & pinned domains from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem('finx_saved_stories');
       if (stored) {
         setSavedStoryIds(JSON.parse(stored));
+      }
+      const storedPins = localStorage.getItem('finx_pinned_domains');
+      if (storedPins) {
+        setPinnedDomains(JSON.parse(storedPins));
       }
     } catch (e) {
       console.warn('LocalStorage unavailable');
@@ -86,9 +94,38 @@ export default function Home() {
     });
   };
 
+  // Toggle domain pinning for "My Focus"
+  const togglePinDomain = (domainId) => {
+    setPinnedDomains((prev) => {
+      const updated = prev.includes(domainId)
+        ? prev.filter(d => d !== domainId)
+        : [...prev, domainId];
+      try {
+        localStorage.setItem('finx_pinned_domains', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
+
+  const applyPreset = (domains) => {
+    setPinnedDomains(domains);
+    try {
+      localStorage.setItem('finx_pinned_domains', JSON.stringify(domains));
+    } catch (e) {}
+    setActiveDomain('my_focus');
+  };
+
+  // Trigger in-app toast preview for Zomato/Swiggy style notifications
+  const triggerToast = (hook) => {
+    setActiveToast(hook);
+    setTimeout(() => {
+      setActiveToast(null);
+    }, 6000);
+  };
+
   // Compute story counts per domain based on current country filter
   const storyCountsByDomain = useMemo(() => {
-    const counts = { all: 0 };
+    const counts = { all: 0, my_focus: 0 };
     DOMAINS.forEach(d => { counts[d.id] = 0; });
 
     allStories.forEach((story) => {
@@ -98,11 +135,14 @@ export default function Home() {
         if (counts[story.domain] !== undefined) {
           counts[story.domain] += 1;
         }
+        if (pinnedDomains.includes(story.domain)) {
+          counts.my_focus += 1;
+        }
       }
     });
 
     return counts;
-  }, [allStories, selectedCountry]);
+  }, [allStories, selectedCountry, pinnedDomains]);
 
   // Main filter pipeline
   const filteredStories = useMemo(() => {
@@ -112,8 +152,12 @@ export default function Home() {
         return false;
       }
 
-      // 2. Domain filter
-      if (activeDomain !== 'all' && story.domain !== activeDomain) {
+      // 2. Domain filter (including "My Focus" pinned domains filter)
+      if (activeDomain === 'my_focus') {
+        if (!pinnedDomains.includes(story.domain)) {
+          return false;
+        }
+      } else if (activeDomain !== 'all' && story.domain !== activeDomain) {
         return false;
       }
 
@@ -144,7 +188,7 @@ export default function Home() {
 
       return true;
     });
-  }, [selectedCountry, activeDomain, showOnlySaved, savedStoryIds, activeFilter, searchQuery]);
+  }, [selectedCountry, activeDomain, pinnedDomains, showOnlySaved, savedStoryIds, activeFilter, searchQuery]);
 
   // Lead 5 stories for top section (only on unfiltered Home view)
   const topBriefStories = useMemo(() => {
@@ -171,6 +215,37 @@ export default function Home() {
 
   return (
     <div className="finx-app">
+      {/* Animated Push Toast Notification (Swiggy/Zomato style) */}
+      {activeToast && (
+        <aside 
+          className="push-notification-toast"
+          role="status"
+          aria-live="polite"
+          aria-label="New financial alert"
+        >
+          <div className="toast-inner">
+            <div className="toast-icon-box">
+              <Bell size={16} />
+            </div>
+            <div className="toast-content">
+              <div className="toast-header-row">
+                <span className="toast-app-name">FIN-X • {activeToast.tag}</span>
+                <span className="toast-time">Just now</span>
+              </div>
+              <strong className="toast-title">{activeToast.title}</strong>
+              <p className="toast-body">{activeToast.body}</p>
+            </div>
+            <button 
+              onClick={() => setActiveToast(null)} 
+              className="toast-close-btn"
+              title="Dismiss"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        </aside>
+      )}
+
       {/* 1. Header with Country Switcher, Global Search & Alerts */}
       <Header
         selectedCountry={selectedCountry}
@@ -183,7 +258,7 @@ export default function Home() {
         showOnlySaved={showOnlySaved}
       />
 
-      {/* 2. Domain Navigation Bar */}
+      {/* 2. Domain Navigation Bar with "My Focus" & Pinning */}
       <DomainNav
         activeDomain={activeDomain}
         onSelectDomain={(id) => {
@@ -191,11 +266,14 @@ export default function Home() {
           setShowOnlySaved(false);
         }}
         storyCountsByDomain={storyCountsByDomain}
+        pinnedDomains={pinnedDomains}
+        onTogglePinDomain={togglePinDomain}
+        onApplyPreset={applyPreset}
       />
 
       {/* 3. Main Content Container */}
       <main className="main-content">
-        {/* Hero Digest Banner */}
+        {/* Hero Digest Banner with 60-Sec Audio Brief Player */}
         <DigestHero
           activeDigest={activeDigest}
           onSelectDigest={setActiveDigest}
@@ -203,6 +281,8 @@ export default function Home() {
           onSelectFilter={setActiveFilter}
           totalStoriesCount={filteredStories.length}
           officialCount={officialCount}
+          topStories={topBriefStories.length > 0 ? topBriefStories : allStories.slice(0, 5)}
+          onStorySelect={(story) => setSelectedStory(story)}
         />
 
         <div className="container">
@@ -223,6 +303,8 @@ export default function Home() {
                   <h2 className="feed-title">
                     {showOnlySaved ? (
                       <>Bookmarks & Saved Briefs ({filteredStories.length})</>
+                    ) : activeDomain === 'my_focus' ? (
+                      <>⭐ My Focus Stream ({filteredStories.length})</>
                     ) : activeDomain !== 'all' ? (
                       <>{DOMAINS.find(d => d.id === activeDomain)?.label} Stream ({filteredStories.length})</>
                     ) : (
@@ -245,7 +327,7 @@ export default function Home() {
                       <span>Live Supabase ({allStories.length} Stories)</span>
                     </span>
                   )}
-                  <span className="sort-label">Sorted by Authority & Relevance</span>
+                  <span className="sort-label">Sorted by Official Authority</span>
                 </div>
               </div>
 
@@ -287,11 +369,11 @@ export default function Home() {
               {/* Source Registry Callout Card */}
               <div className="source-card glass-panel">
                 <div className="source-card-head">
-                  <ShieldCheck size={16} style={{ color: '#10b981' }} />
+                  <ShieldCheck size={16} style={{ color: '#047857' }} />
                   <span className="source-card-title">100% Attribution Transparency</span>
                 </div>
                 <p className="source-card-body">
-                  FIN-X summarizes public official circulars (RBI, SEBI, CBDT, CBIC, Fed) and links directly to original publications.
+                  FIN-X summarizes public official circulars (RBI, SEBI, CBDT, CBIC, Fed) and links directly to authoritative publications.
                 </p>
                 <button
                   onClick={() => setIsSourceRegistryOpen(true)}
@@ -330,7 +412,7 @@ export default function Home() {
                 <span className="footer-heading">Product & Transparency</span>
                 <button onClick={() => setIsSourceRegistryOpen(true)} className="footer-link">Source Registry (17 Feeds)</button>
                 <button onClick={() => setIsAlertsOpen(true)} className="footer-link">Must-Know Alerts</button>
-                <a href="#calendar" onClick={(e) => { e.preventDefault(); alert("Interactive calendar view active in sidebar!"); }} className="footer-link">Tax & Rate Calendar</a>
+                <a href="#calendar" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="footer-link">Tax & Rate Calendar</a>
               </div>
             </div>
           </div>
@@ -358,6 +440,7 @@ export default function Home() {
       <AlertsModal
         isOpen={isAlertsOpen}
         onClose={() => setIsAlertsOpen(false)}
+        onTriggerToast={triggerToast}
       />
 
       <SourceRegistryModal
@@ -370,6 +453,83 @@ export default function Home() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
+          background: #f8fafc;
+        }
+
+        /* Swiggy/Zomato Toast Animation */
+        .push-notification-toast {
+          position: fixed;
+          top: 85px;
+          right: 24px;
+          z-index: 1000;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-left: 4px solid #2563eb;
+          border-radius: 12px;
+          box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.16);
+          padding: 0.85rem 1rem;
+          max-width: 380px;
+          animation: slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-inner {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+
+        .toast-icon-box {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563eb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .toast-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+          flex: 1;
+        }
+
+        .toast-header-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.65rem;
+          color: #94a3b8;
+        }
+
+        .toast-app-name {
+          font-weight: 700;
+          color: #2563eb;
+          text-transform: uppercase;
+        }
+
+        .toast-title {
+          font-size: 0.82rem;
+          font-weight: 800;
+          color: #0f172a;
+        }
+
+        .toast-body {
+          font-size: 0.75rem;
+          color: #475569;
+          line-height: 1.35;
+        }
+
+        .toast-close-btn {
+          color: #94a3b8;
+          padding: 2px;
+        }
+
+        .toast-close-btn:hover {
+          color: #0f172a;
         }
 
         .main-content {
@@ -395,7 +555,7 @@ export default function Home() {
           align-items: center;
           justify-content: space-between;
           padding-bottom: 0.5rem;
-          border-bottom: 1px solid var(--border-subtle);
+          border-bottom: 1px solid rgba(226, 232, 240, 0.9);
           flex-wrap: wrap;
           gap: 0.5rem;
         }
@@ -408,8 +568,8 @@ export default function Home() {
 
         .feed-title {
           font-size: 1.05rem;
-          font-weight: 700;
-          color: #ffffff;
+          font-weight: 800;
+          color: #0f172a;
           letter-spacing: -0.01em;
         }
 
@@ -417,9 +577,9 @@ export default function Home() {
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(239, 68, 68, 0.12);
-          color: #f87171;
-          border: 1px solid rgba(239, 68, 68, 0.3);
+          background: rgba(239, 68, 68, 0.08);
+          color: #dc2626;
+          border: 1px solid rgba(239, 68, 68, 0.25);
           font-size: 0.7rem;
           font-weight: 600;
           padding: 0.2rem 0.5rem;
@@ -428,7 +588,7 @@ export default function Home() {
         }
 
         .clear-filters-btn:hover {
-          background: rgba(239, 68, 68, 0.25);
+          background: #dc2626;
           color: #ffffff;
         }
 
@@ -444,21 +604,26 @@ export default function Home() {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(16, 185, 129, 0.12);
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          color: #10b981;
+          background: rgba(16, 185, 129, 0.1);
+          border: 1px solid rgba(16, 185, 129, 0.25);
+          color: #047857;
           font-size: 0.68rem;
-          font-weight: 600;
+          font-weight: 700;
           padding: 0.15rem 0.5rem;
           border-radius: 9999px;
         }
 
         .live-dot {
-          width: 5px;
-          height: 5px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
           background: #10b981;
           box-shadow: 0 0 6px #10b981;
+        }
+
+        .sort-label {
+          color: #64748b;
+          font-weight: 500;
         }
 
         .stories-stream {
@@ -474,6 +639,9 @@ export default function Home() {
           align-items: center;
           text-align: center;
           gap: 0.75rem;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 14px;
         }
 
         .empty-icon {
@@ -482,8 +650,8 @@ export default function Home() {
 
         .empty-title {
           font-size: 1.1rem;
-          font-weight: 700;
-          color: #ffffff;
+          font-weight: 800;
+          color: #0f172a;
         }
 
         .empty-desc {
@@ -495,7 +663,7 @@ export default function Home() {
         .empty-reset-btn {
           margin-top: 0.5rem;
           padding: 0.5rem 1.15rem;
-          background: var(--brand-primary);
+          background: #2563eb;
           color: #ffffff;
           font-size: 0.8rem;
           font-weight: 600;
@@ -504,7 +672,8 @@ export default function Home() {
         }
 
         .empty-reset-btn:hover {
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+          background: #1d4ed8;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
           transform: translateY(-1px);
         }
 
@@ -519,6 +688,9 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           gap: 0.65rem;
+          background: #ffffff;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 14px;
         }
 
         .source-card-head {
@@ -530,13 +702,13 @@ export default function Home() {
         .source-card-title {
           font-size: 0.82rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
         }
 
         .source-card-body {
           font-size: 0.73rem;
           line-height: 1.45;
-          color: var(--text-secondary);
+          color: #475569;
         }
 
         .source-card-btn {
@@ -545,19 +717,19 @@ export default function Home() {
           gap: 0.35rem;
           font-size: 0.74rem;
           font-weight: 600;
-          color: #38bdf8;
+          color: #2563eb;
           width: fit-content;
           transition: color 0.15s ease;
         }
 
         .source-card-btn:hover {
-          color: #ffffff;
+          color: #1d4ed8;
         }
 
         /* Footer */
         .footer-wrapper {
-          border-top: 1px solid var(--border-subtle);
-          background: #04070b;
+          border-top: 1px solid rgba(226, 232, 240, 0.9);
+          background: #ffffff;
           padding: 2.5rem 0 1.5rem 0;
           margin-top: auto;
         }
@@ -577,12 +749,12 @@ export default function Home() {
         .footer-logo {
           font-size: 1.4rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #0f172a;
           margin-bottom: 0.5rem;
         }
 
         .logo-accent {
-          background: var(--brand-gradient);
+          background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
@@ -590,7 +762,7 @@ export default function Home() {
         .footer-tagline {
           font-size: 0.8rem;
           line-height: 1.5;
-          color: var(--text-secondary);
+          color: #475569;
         }
 
         .footer-links-group {
@@ -608,7 +780,7 @@ export default function Home() {
         .footer-heading {
           font-size: 0.78rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
           text-transform: uppercase;
           letter-spacing: 0.04em;
           margin-bottom: 0.25rem;
@@ -616,13 +788,13 @@ export default function Home() {
 
         .footer-link {
           font-size: 0.76rem;
-          color: var(--text-secondary);
+          color: #475569;
           text-align: left;
           transition: color 0.15s ease;
         }
 
         .footer-link:hover {
-          color: #38bdf8;
+          color: #2563eb;
         }
 
         .footer-bottom {
@@ -630,18 +802,18 @@ export default function Home() {
           flex-direction: column;
           gap: 1rem;
           padding-top: 1.5rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          border-top: 1px solid rgba(241, 245, 249, 0.95);
         }
 
         .disclaimer-text {
           font-size: 0.72rem;
           line-height: 1.5;
-          color: var(--text-muted);
+          color: #64748b;
         }
 
         .footer-copy {
           font-size: 0.7rem;
-          color: var(--text-muted);
+          color: #94a3b8;
         }
 
         @media (max-width: 1024px) {
