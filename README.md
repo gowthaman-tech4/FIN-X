@@ -29,14 +29,20 @@
    - Pin favorite domains (e.g., Tax & GST + Regulations for a CA, Markets + Economy for a trader).
    - 1-click audience presets saved to `localStorage`.
 
-5. **🔔 Swiggy / Zomato-Style Witty Notifications**:
-   - High-curiosity, punchy financial alerts based on the day's actual biggest news.
-   - Flexible cadence: **1× Daily Wrap (7:00 PM)** or **3× Daily Digest (7 AM, 1 PM, 7 PM)**.
-   - Built-in test trigger for web push notifications.
+5. **🔔 Fully Customizable Alert Times (Editable Delivery)**:
+   - Complete flexibility: set your exact preferred alert delivery time (e.g. 8:00 AM, 5:30 PM, or custom exact minute) or edit individual morning/midday/evening slots.
+   - 1-click quick presets: Morning Market Prep (8:00 AM), Midday Break (1:00 PM), Market Close (5:30 PM), Evening Wrap (7:00 PM).
+   - High-curiosity Swiggy/Zomato-style witty notification preview with instant test push.
 
-6. **100% Attribution Transparency**:
-   - Every single story links directly to the authoritative official circular (RBI, SEBI, CBDT, Fed gazettes).
-   - Curated directory of 17 verified P0 official bodies and trusted media feeds.
+6. **📰 Sharp-Edged Wikipedia Design & Typography**:
+   - Clean, crisp encyclopedic styling with sharp edges (`border-radius: 0px`) and Wikipedia-standard borders.
+   - Editorial typography utilizing `Linux Libertine` / `EB Garamond` / `Georgia` serif headings with high-contrast legibility.
+   - Realistic editorial financial news images for verified stories with graceful fallbacks.
+
+7. **🏛 Official FIN-X Brand Identity**:
+   - Institutional Forest Green & Emerald scroll parchment with sage checkmark emblem.
+   - Brand motto: **FIN-X: FINANCE NEWS FOR YOU**.
+   - 100% Attribution Transparency: direct links to verified regulatory circulars across 17 authorities.
 
 ---
 

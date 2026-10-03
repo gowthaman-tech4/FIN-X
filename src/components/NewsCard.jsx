@@ -10,7 +10,8 @@ import {
   Flame, 
   Clock, 
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  ImageIcon
 } from 'lucide-react';
 import { DOMAINS } from '../data/mockData';
 
@@ -21,6 +22,7 @@ export default function NewsCard({
   onStoryClick
 }) {
   const [copied, setCopied] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const domainObj = DOMAINS.find(d => d.id === story.domain) || {
     label: story.domain.toUpperCase(),
@@ -39,7 +41,7 @@ export default function NewsCard({
     e.stopPropagation();
     const shareData = {
       title: story.headline,
-      text: `${story.headline}\n\nVia FIN-X (Global Finance Digest)`,
+      text: `${story.headline}\n\nVia FIN-X (Finance News For You)`,
       url: story.source_url
     };
 
@@ -71,20 +73,38 @@ export default function NewsCard({
       id={`story-card-${story.id}`}
       onClick={() => onStoryClick && onStoryClick(story)}
     >
+      {/* Real News Editorial Image Banner (if available) */}
+      {story.image_url && !imageError && (
+        <div className="card-image-wrap">
+          <img 
+            src={story.image_url} 
+            alt={story.headline}
+            className="card-news-img"
+            loading="lazy"
+            onError={() => setImageError(true)}
+          />
+          <div className="card-image-domain-tag" style={{ background: domainObj.color }}>
+            {domainObj.label}
+          </div>
+        </div>
+      )}
+
       {/* Top Meta Bar */}
       <div className="card-top-bar">
         <div className="meta-left">
-          {/* Domain Tag */}
-          <span 
-            className="domain-badge"
-            style={{ 
-              borderColor: domainObj.color,
-              color: domainObj.color,
-              background: `color-mix(in srgb, ${domainObj.color} 10%, transparent)`
-            }}
-          >
-            {domainObj.label}
-          </span>
+          {/* Domain Tag (if not shown in image banner) */}
+          {(!story.image_url || imageError) && (
+            <span 
+              className="domain-badge"
+              style={{ 
+                borderColor: domainObj.color,
+                color: domainObj.color,
+                background: `color-mix(in srgb, ${domainObj.color} 8%, transparent)`
+              }}
+            >
+              {domainObj.label}
+            </span>
+          )}
 
           {/* Country Flag & Label */}
           <span className="country-badge" title={`Country: ${story.country}`}>
@@ -102,7 +122,7 @@ export default function NewsCard({
 
           {isOfficial && (
             <span className="official-pill">
-              <ShieldCheck size={12} style={{ color: '#047857' }} />
+              <ShieldCheck size={12} style={{ color: 'var(--brand-primary)' }} />
               <span>P0 Authority</span>
             </span>
           )}
@@ -115,7 +135,7 @@ export default function NewsCard({
             className="icon-action-btn"
             title="Share story link"
           >
-            {copied ? <Check size={14} style={{ color: '#047857' }} /> : <Share2 size={14} />}
+            {copied ? <Check size={14} style={{ color: 'var(--brand-accent)' }} /> : <Share2 size={14} />}
           </button>
 
           <button 
@@ -131,7 +151,7 @@ export default function NewsCard({
         </div>
       </div>
 
-      {/* Main Headline */}
+      {/* Main Headline with Wikipedia Serif */}
       <h3 className="card-headline">
         {story.headline}
       </h3>
@@ -139,8 +159,8 @@ export default function NewsCard({
       {/* Strict 2-Line AI Synthesis */}
       <div className="summary-block">
         <div className="summary-badge">
-          <Sparkles size={12} style={{ color: '#2563eb' }} />
-          <span>2-LINE SUMMARY</span>
+          <Sparkles size={11} style={{ color: 'var(--brand-primary)' }} />
+          <span>2-LINE EXECUTIVE SUMMARY</span>
         </div>
         <div className="summary-content">
           {summaryLines.map((line, idx) => (
@@ -169,7 +189,7 @@ export default function NewsCard({
           onClick={(e) => e.stopPropagation()}
           title={`Open original source at ${story.source_name}`}
         >
-          <span>Read Official Circular</span>
+          <span>Official Circular</span>
           <ExternalLink size={12} />
         </a>
       </div>
@@ -177,27 +197,64 @@ export default function NewsCard({
       <style jsx>{`
         .news-card {
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
+          border: 1px solid var(--border-subtle);
           border-left: 3px solid var(--card-accent);
-          border-radius: 14px;
-          padding: 1.35rem 1.45rem;
+          border-radius: var(--radius);
+          padding: 1.25rem 1.35rem;
           display: flex;
           flex-direction: column;
-          gap: 0.9rem;
+          gap: 0.85rem;
           cursor: pointer;
-          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: var(--shadow-sm);
+          transition: all 0.15s ease;
         }
 
         .news-card:hover {
-          border-color: rgba(203, 213, 225, 0.95);
-          box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.07);
-          transform: translateY(-2px);
+          border-color: var(--border-highlight);
+          box-shadow: var(--shadow-md);
         }
 
         .critical-border {
-          border-left: 4px solid #ef4444;
-          background: linear-gradient(180deg, #ffffff 0%, #fffbfb 100%);
+          border-left: 4px solid var(--critical-color);
+          background: #fffdfd;
+        }
+
+        /* Editorial Image Banner with Sharp Edges */
+        .card-image-wrap {
+          position: relative;
+          width: 100%;
+          height: 155px;
+          overflow: hidden;
+          background: #f1f3f4;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius);
+          margin-bottom: 0.25rem;
+        }
+
+        .card-news-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.25s ease;
+        }
+
+        .news-card:hover .card-news-img {
+          transform: scale(1.02);
+        }
+
+        .card-image-domain-tag {
+          position: absolute;
+          bottom: 0.5rem;
+          left: 0.5rem;
+          color: #ffffff;
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          padding: 0.18rem 0.5rem;
+          border-radius: var(--radius);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
         }
 
         .card-top-bar {
@@ -219,8 +276,8 @@ export default function NewsCard({
           font-size: 0.68rem;
           font-weight: 700;
           text-transform: uppercase;
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
+          padding: 0.12rem 0.45rem;
+          border-radius: var(--radius-sm);
           border: 1px solid;
           letter-spacing: 0.02em;
         }
@@ -231,45 +288,36 @@ export default function NewsCard({
           gap: 0.25rem;
           font-size: 0.72rem;
           color: var(--text-secondary);
-          background: #f1f5f9;
-          padding: 0.15rem 0.45rem;
-          border-radius: 4px;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        .flag-icon {
-          font-size: 0.8rem;
-        }
-
-        .country-text {
-          font-weight: 600;
+          background: #f8faf9;
+          padding: 0.12rem 0.4rem;
+          border-radius: var(--radius-sm);
+          border: 1px solid var(--border-subtle);
         }
 
         .critical-badge {
           display: inline-flex;
           align-items: center;
           gap: 0.25rem;
-          font-size: 0.65rem;
+          font-size: 0.68rem;
           font-weight: 700;
-          text-transform: uppercase;
-          color: #dc2626;
-          background: rgba(239, 68, 68, 0.08);
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          padding: 0.12rem 0.4rem;
-          border-radius: 4px;
+          color: var(--critical-color);
+          background: var(--critical-bg);
+          border: 1px solid var(--critical-border);
+          padding: 0.12rem 0.45rem;
+          border-radius: var(--radius-sm);
         }
 
         .official-pill {
           display: inline-flex;
           align-items: center;
           gap: 0.25rem;
-          font-size: 0.65rem;
-          font-weight: 600;
-          color: #047857;
-          background: rgba(16, 185, 129, 0.08);
-          border: 1px solid rgba(16, 185, 129, 0.2);
+          font-size: 0.68rem;
+          font-weight: 700;
+          color: var(--brand-primary);
+          background: #f0f7f3;
+          border: 1px solid #a8cfb8;
           padding: 0.12rem 0.45rem;
-          border-radius: 4px;
+          border-radius: var(--radius-sm);
         }
 
         .meta-right {
@@ -279,60 +327,63 @@ export default function NewsCard({
         }
 
         .icon-action-btn {
-          width: 30px;
-          height: 30px;
-          border-radius: 6px;
+          width: 28px;
+          height: 28px;
           display: flex;
           align-items: center;
           justify-content: center;
+          border: 1px solid var(--border-subtle);
+          background: #ffffff;
+          border-radius: var(--radius-sm);
           color: var(--text-muted);
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
           transition: all 0.15s ease;
         }
 
         .icon-action-btn:hover {
-          color: #0f172a;
-          background: #f1f5f9;
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
         }
 
         .icon-action-btn.saved {
-          color: #2563eb;
-          background: rgba(37, 99, 235, 0.08);
-          border-color: rgba(37, 99, 235, 0.25);
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
+          background: #f0f7f3;
         }
 
         .bookmark-filled {
           fill: currentColor;
         }
 
+        /* Wikipedia Headline */
         .card-headline {
-          font-size: 1.08rem;
-          font-weight: 700;
-          color: #0f172a;
-          line-height: 1.4;
-          letter-spacing: -0.015em;
+          font-family: var(--font-serif);
+          font-size: 1.15rem;
+          font-weight: 600;
+          line-height: 1.35;
+          color: var(--text-primary);
+          letter-spacing: -0.01em;
         }
 
+        /* Summary Block - Wikipedia encyclopedic quote block */
         .summary-block {
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          border-radius: 8px;
-          padding: 0.75rem 0.95rem;
+          background: #f8faf9;
+          border: 1px solid #d8ded9;
+          border-left: 2px solid var(--brand-primary);
+          border-radius: var(--radius);
+          padding: 0.75rem 0.85rem;
           display: flex;
           flex-direction: column;
-          gap: 0.4rem;
+          gap: 0.45rem;
         }
 
         .summary-badge {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          font-size: 0.65rem;
-          font-weight: 800;
+          font-size: 0.64rem;
+          font-weight: 700;
+          color: var(--brand-primary);
           letter-spacing: 0.05em;
-          color: #2563eb;
-          text-transform: uppercase;
         }
 
         .summary-content {
@@ -342,18 +393,16 @@ export default function NewsCard({
         }
 
         .summary-line {
-          font-size: 0.85rem;
-          color: #334155;
-          line-height: 1.48;
+          font-size: 0.82rem;
+          line-height: 1.5;
+          color: var(--text-primary);
           display: flex;
-          align-items: baseline;
           gap: 0.4rem;
         }
 
         .line-num {
           font-weight: 700;
-          color: #64748b;
-          font-size: 0.8rem;
+          color: var(--brand-primary);
           flex-shrink: 0;
         }
 
@@ -361,12 +410,14 @@ export default function NewsCard({
           flex: 1;
         }
 
+        /* Card Footer */
         .card-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-top: 0.5rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.9);
+          padding-top: 0.6rem;
+          border-top: 1px solid #eaecf0;
+          font-size: 0.74rem;
           flex-wrap: wrap;
           gap: 0.5rem;
         }
@@ -375,21 +426,20 @@ export default function NewsCard({
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: var(--text-muted);
         }
 
         .source-title {
-          color: var(--text-muted);
+          font-weight: 500;
         }
 
         .source-name {
-          font-weight: 600;
-          color: #0f172a;
+          font-weight: 700;
+          color: var(--text-primary);
         }
 
         .footer-dot {
-          color: var(--text-muted);
+          color: #c8ccd1;
         }
 
         .time-ago {
@@ -399,20 +449,22 @@ export default function NewsCard({
         .source-direct-btn {
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          font-size: 0.75rem;
+          gap: 0.3rem;
+          font-size: 0.73rem;
           font-weight: 600;
-          color: #2563eb;
-          background: rgba(37, 99, 235, 0.06);
-          padding: 0.28rem 0.65rem;
-          border-radius: 6px;
-          border: 1px solid rgba(37, 99, 235, 0.2);
+          color: var(--brand-primary);
+          background: #ffffff;
+          border: 1px solid var(--border-subtle);
+          padding: 0.2rem 0.55rem;
+          border-radius: var(--radius-sm);
           transition: all 0.15s ease;
         }
 
         .source-direct-btn:hover {
-          background: #2563eb;
+          background: var(--brand-primary);
           color: #ffffff;
+          border-color: var(--brand-primary);
+          text-decoration: none;
         }
       `}</style>
     </article>

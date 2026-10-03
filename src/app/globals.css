@@ -1,87 +1,95 @@
 /* ==============================================================================
    FIN-X Design System & Global Styles
-   Classic Light Editorial Theme, Rich Gradients & Financial Micro-animations
+   Wikipedia Editorial Theme: Sharp Edges, Linux Libertine Serif & Forest Green Brand
    ============================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap');
 
 :root {
-  /* Canvas & Surface - Classic Crisp White & Ivory Foundation */
-  --bg-main: #f8fafc;
+  /* Canvas & Surface - Clean Wikipedia Parchment Foundation */
+  --bg-main: #f8faf9;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #fbfcfe;
-  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-card-hover: #fcfdfc;
+  --bg-glass: rgba(255, 255, 255, 0.98);
   --bg-input: #ffffff;
 
-  /* Borders & Dividers */
-  --border-subtle: rgba(15, 23, 42, 0.07);
-  --border-highlight: rgba(15, 23, 42, 0.14);
-  --border-focus: #2563eb;
+  /* Borders & Dividers - Crisp Wikipedia Grey Lines */
+  --border-subtle: #c8ccd1;
+  --border-highlight: #a2a9b1;
+  --border-wiki: #a2a9b1;
+  --border-focus: #1e4635;
 
-  /* Typography */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Newsreader', Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* Sharp Edge Geometry (0px default, 2px micro) */
+  --radius: 0px;
+  --radius-sm: 2px;
 
-  /* Text Colors - High Contrast Classic Readability */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  /* Typography - Wikipedia Vector Serif & Clean Neutral UI */
+  --font-serif: 'Linux Libertine', 'EB Garamond', 'Source Serif 4', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Lato, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* Text Colors - High Contrast Wikipedia Editorial Ink */
+  --text-primary: #202122;
+  --text-secondary: #54595d;
+  --text-muted: #72777d;
   --text-inverse: #ffffff;
 
-  /* Brand Accents & Rich Gradients */
-  --brand-primary: #2563eb;
-  --brand-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #4f46e5 100%);
-  --brand-glow: rgba(37, 99, 235, 0.15);
+  /* Brand Accents & Theme - FIN-X Forest Green & Scroll Checkmark */
+  --brand-primary: #1e4635;
+  --brand-secondary: #2e7456;
+  --brand-accent: #3cb371;
+  --brand-light: #f0f7f3;
+  --brand-gradient: linear-gradient(135deg, #16382b 0%, #1e4635 50%, #2e7456 100%);
+  --brand-glow: rgba(30, 70, 53, 0.15);
 
   /* Rich Domain Color Tokens */
-  --domain-tax: #b45309;
-  --domain-tax-bg: rgba(245, 158, 11, 0.09);
-  --domain-tax-border: rgba(217, 119, 6, 0.28);
+  --domain-tax: #8b3a00;
+  --domain-tax-bg: #fff8f0;
+  --domain-tax-border: #d4a373;
 
-  --domain-regulations: #6d28d9;
-  --domain-regulations-bg: rgba(139, 92, 246, 0.09);
-  --domain-regulations-border: rgba(124, 58, 237, 0.28);
+  --domain-regulations: #1e4635;
+  --domain-regulations-bg: #f0f7f3;
+  --domain-regulations-border: #a8cfb8;
 
-  --domain-markets: #047857;
-  --domain-markets-bg: rgba(16, 185, 129, 0.09);
-  --domain-markets-border: rgba(5, 150, 105, 0.28);
+  --domain-markets: #0d5f3a;
+  --domain-markets-bg: #f0faf4;
+  --domain-markets-border: #8ecbb0;
 
-  --domain-economy: #0e7490;
-  --domain-economy-bg: rgba(6, 182, 212, 0.09);
-  --domain-economy-border: rgba(8, 145, 178, 0.28);
+  --domain-economy: #1b4d63;
+  --domain-economy-bg: #f0f7fa;
+  --domain-economy-border: #9ec5d6;
 
-  --domain-banking: #1d4ed8;
-  --domain-banking-bg: rgba(37, 99, 235, 0.09);
-  --domain-banking-border: rgba(29, 78, 216, 0.28);
+  --domain-banking: #1e3a8a;
+  --domain-banking-bg: #eff6ff;
+  --domain-banking-border: #93c5fd;
 
-  --domain-policy: #be123c;
-  --domain-policy-bg: rgba(244, 63, 94, 0.09);
-  --domain-policy-border: rgba(225, 29, 72, 0.28);
+  --domain-policy: #881337;
+  --domain-policy-bg: #fff1f2;
+  --domain-policy-border: #fca5a5;
 
-  --domain-companies: #a21caf;
-  --domain-companies-bg: rgba(217, 70, 239, 0.09);
-  --domain-companies-border: rgba(192, 38, 211, 0.28);
+  --domain-companies: #581c87;
+  --domain-companies-bg: #faf5ff;
+  --domain-companies-border: #d8b4fe;
 
   /* Importance Badges */
-  --critical-color: #dc2626;
-  --critical-bg: rgba(239, 68, 68, 0.08);
-  --critical-border: rgba(220, 38, 38, 0.25);
+  --critical-color: #b91c1c;
+  --critical-bg: #fef2f2;
+  --critical-border: #f87171;
 
-  --high-color: #b45309;
-  --high-bg: rgba(245, 158, 11, 0.08);
+  --high-color: #92400e;
+  --high-bg: #fffbeb;
 
   --medium-color: #475569;
-  --medium-bg: rgba(100, 116, 139, 0.08);
+  --medium-bg: #f8fafc;
 
-  /* Shadows & Elevations */
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
-  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
-  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
-  --shadow-glow: 0 0 24px -4px rgba(37, 99, 235, 0.15);
-  --card-blur: blur(14px);
+  /* Sharp Wikipedia Shadows & Elevations */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 16px rgba(30, 70, 53, 0.15);
+  --card-blur: none;
 }
 
 /* Base Reset */
@@ -105,62 +113,73 @@ body {
   display: flex;
   flex-direction: column;
   background: 
-    radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.04) 0%, transparent 45%),
-    radial-gradient(circle at 85% 25%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 10% 10%, rgba(30, 70, 53, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(46, 116, 86, 0.03) 0%, transparent 40%),
     var(--bg-main);
   background-attachment: fixed;
   overflow-x: hidden;
 }
 
+/* Headings with Wikipedia Linux Libertine Serif */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
 a {
-  color: inherit;
+  color: #1e4635;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #2e7456;
 }
 
 button {
-  font-family: inherit;
+  font-family: var(--font-sans);
   cursor: pointer;
-  border: none;
-  background: transparent;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
   outline: none;
+  transition: all 0.15s ease;
 }
 
 input {
-  font-family: inherit;
+  font-family: var(--font-sans);
+  border-radius: var(--radius-sm);
 }
 
-/* Custom Clean Scrollbar */
+/* Custom Sharp Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f1f3f4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: #a2a9b1;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #72777d;
 }
 
-/* Reusable Classic Glassmorphism Card Style */
+/* Sharp Wikipedia Panel Style */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: var(--card-blur);
-  -webkit-backdrop-filter: var(--card-blur);
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
+  border-radius: 0px !important;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.2s ease, 
-              box-shadow 0.2s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .glass-panel:hover {
@@ -168,91 +187,58 @@ input {
   box-shadow: var(--shadow-md);
 }
 
-/* Card Hover Lift Animation */
+/* Wikipedia Infobox / Sidebar card */
+.wiki-infobox {
+  background: #ffffff;
+  border: 1px solid #a2a9b1;
+  padding: 0.85rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-radius: 0px;
+}
+
+/* Card Hover Lift - Clean and Subtle */
 .card-hover-lift {
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .card-hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-secondary);
 }
 
-/* Glowing Accent Border */
-.glow-effect {
-  position: relative;
-}
-
-.glow-effect::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: var(--brand-gradient);
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.glow-effect:hover::before {
-  opacity: 0.35;
+/* Wikipedia Section Title with Rule Divider */
+.wiki-section-heading {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  border-bottom: 1px solid #a2a9b1;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Animated Keyframes */
-@keyframes ambientDrift {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(15px, -15px) scale(1.04);
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
 @keyframes liveDot {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
   }
   50% {
     opacity: 0.8;
     transform: scale(1.1);
-    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
   }
-}
-
-@keyframes slideDownToast {
-  0% {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
 .live-indicator {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background-color: #10b981;
+  background-color: #22c55e;
   animation: liveDot 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
@@ -264,11 +250,32 @@ input {
   width: 100%;
 }
 
+/* News Image Thumbnail Container */
+.story-image-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #eaecf0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0px;
+}
+
+.story-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.story-image-wrap:hover img {
+  transform: scale(1.02);
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -277,5 +284,5 @@ input {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.25s ease forwards;
 }

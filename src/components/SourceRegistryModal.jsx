@@ -31,10 +31,10 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="title-group">
-            <ShieldCheck size={20} style={{ color: '#047857' }} />
+            <ShieldCheck size={20} style={{ color: 'var(--brand-primary)' }} />
             <div>
               <h2 className="modal-title">Source Registry & Attribution Directory</h2>
-              <span className="modal-sub">17 Verified Official Authorities, Regulators & Media Outlets</span>
+              <span className="modal-sub">17 Verified Official Authorities, Regulators & Media Desks</span>
             </div>
           </div>
           <button onClick={onClose} className="close-btn" title="Close">
@@ -43,9 +43,10 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         </div>
 
         <p className="registry-desc">
-          FIN-X adheres to strict ethical aggregation standards: we do not scrape behind paywalls, we do not copy full articles, and we always link directly to the authoritative original source.
+          FIN-X adheres to strict ethical aggregation standards: we do not copy full articles, we summarize official regulatory circulars in 2 lines, and we always link directly to the authoritative original publication.
         </p>
 
+        {/* Wikipedia Style Table */}
         <div className="sources-table-wrapper">
           <table className="sources-table">
             <thead>
@@ -100,9 +101,9 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         .modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(15, 23, 42, 0.45);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          background: rgba(0, 0, 0, 0.55);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -112,24 +113,24 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
 
         .modal-card {
           width: 100%;
-          max-width: 760px;
+          max-width: 820px;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.95);
-          border-radius: 16px;
-          padding: 1.6rem;
-          box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
+          border: 1px solid #a2a9b1;
+          border-radius: var(--radius);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
           display: flex;
           flex-direction: column;
-          gap: 1.15rem;
-          max-height: 88vh;
+          max-height: 90vh;
+          overflow-y: auto;
         }
 
         .modal-header {
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           justify-content: space-between;
-          padding-bottom: 0.75rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+          padding: 1.15rem 1.4rem;
+          border-bottom: 1px solid #c8ccd1;
+          background: #f8faf9;
         }
 
         .title-group {
@@ -139,178 +140,159 @@ export default function SourceRegistryModal({ isOpen, onClose }) {
         }
 
         .modal-title {
-          font-size: 1.1rem;
-          font-weight: 800;
-          color: #0f172a;
+          font-family: var(--font-serif);
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: var(--brand-primary);
         }
 
         .modal-sub {
-          font-size: 0.75rem;
-          color: #64748b;
+          font-size: 0.73rem;
+          color: var(--text-secondary);
         }
 
         .close-btn {
-          color: #64748b;
+          color: var(--text-muted);
           padding: 4px;
-          border-radius: 6px;
+          border: 1px solid transparent;
+          border-radius: var(--radius-sm);
+          background: transparent;
         }
 
         .close-btn:hover {
-          color: #0f172a;
-          background: #f1f5f9;
+          color: var(--text-primary);
+          border-color: #c8ccd1;
         }
 
         .registry-desc {
+          padding: 0.95rem 1.4rem;
           font-size: 0.78rem;
-          line-height: 1.45;
-          color: #334155;
-          background: rgba(16, 185, 129, 0.08);
-          border: 1px solid rgba(16, 185, 129, 0.2);
-          padding: 0.65rem 0.85rem;
-          border-radius: 8px;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          background: #f8faf9;
+          border-bottom: 1px solid #eaecf0;
         }
 
         .sources-table-wrapper {
-          overflow-y: auto;
-          max-height: 48vh;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 8px;
+          overflow-x: auto;
+          padding: 0.5rem 1.4rem 1rem;
         }
 
         .sources-table {
           width: 100%;
           border-collapse: collapse;
-          text-align: left;
-          font-size: 0.78rem;
+          font-size: 0.76rem;
+          border: 1px solid #c8ccd1;
         }
 
         .sources-table th {
-          background: #f8fafc;
-          padding: 0.65rem 0.85rem;
-          color: #64748b;
+          background: #f8faf9;
+          padding: 0.55rem 0.65rem;
+          text-align: left;
           font-weight: 700;
+          color: var(--text-primary);
+          border-bottom: 1px solid #a2a9b1;
+          border-right: 1px solid #eaecf0;
+          font-size: 0.72rem;
           text-transform: uppercase;
-          font-size: 0.68rem;
-          letter-spacing: 0.04em;
-          border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-          position: sticky;
-          top: 0;
-          backdrop-filter: blur(8px);
         }
 
         .sources-table td {
-          padding: 0.75rem 0.85rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
-          color: #334155;
+          padding: 0.55rem 0.65rem;
+          border-bottom: 1px solid #eaecf0;
+          border-right: 1px solid #eaecf0;
+          color: var(--text-secondary);
         }
 
-        .sources-table tr:hover td {
-          background: #f8fafc;
+        .sources-table tr:hover {
+          background: #f0f7f3;
         }
 
         .source-name-cell {
           display: flex;
           flex-direction: column;
-          gap: 0.15rem;
+          gap: 0.1rem;
         }
 
         .source-name-cell strong {
-          color: #0f172a;
-          font-weight: 700;
+          color: var(--text-primary);
         }
 
         .source-type-sub {
-          font-size: 0.7rem;
-          color: #64748b;
+          font-size: 0.65rem;
+          color: var(--text-muted);
         }
 
         .region-chip {
           display: inline-block;
-          background: #f1f5f9;
-          padding: 0.15rem 0.45rem;
-          border-radius: 4px;
-          font-size: 0.72rem;
-          font-weight: 600;
+          font-size: 0.7rem;
         }
 
         .level-pill {
           display: inline-block;
-          padding: 0.15rem 0.45rem;
-          border-radius: 4px;
-          font-size: 0.68rem;
+          padding: 1px 5px;
+          border-radius: var(--radius-sm);
           font-weight: 700;
+          font-size: 0.65rem;
         }
 
         .level-pill.p0 {
-          background: rgba(16, 185, 129, 0.1);
-          color: #047857;
-          border: 1px solid rgba(16, 185, 129, 0.25);
+          background: #f0f7f3;
+          color: var(--brand-primary);
+          border: 1px solid #a8cfb8;
         }
 
         .level-pill.p1 {
-          background: rgba(37, 99, 235, 0.1);
-          color: #2563eb;
-          border: 1px solid rgba(37, 99, 235, 0.25);
+          background: #eff6ff;
+          color: #1d4ed8;
+          border: 1px solid #bfdbfe;
         }
 
         .level-pill.p3 {
-          background: rgba(100, 116, 139, 0.1);
+          background: #f8fafc;
           color: #64748b;
+          border: 1px solid #e2e8f0;
         }
 
-        .method-cell {
-          color: #64748b;
-          font-family: var(--font-mono);
-          font-size: 0.72rem;
-        }
-
-        .trust-cell {
+        .trust-bar-val {
           font-weight: 700;
-          color: #047857;
+          color: var(--brand-primary);
         }
 
         .external-source-link {
-          color: #2563eb;
+          color: var(--brand-primary);
           display: inline-flex;
           align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
-          border-radius: 4px;
-          transition: all 0.15s ease;
-        }
-
-        .external-source-link:hover {
-          background: rgba(37, 99, 235, 0.08);
-          color: #1d4ed8;
+          padding: 2px;
         }
 
         .modal-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-top: 0.75rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.9);
+          padding: 0.95rem 1.4rem;
+          border-top: 1px solid #c8ccd1;
+          background: #f8faf9;
         }
 
         .footer-info {
           font-size: 0.72rem;
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         .btn-close-action {
-          padding: 0.45rem 0.95rem;
-          background: #f1f5f9;
-          color: #334155;
+          padding: 0.4rem 0.85rem;
+          background: var(--brand-primary);
+          color: #ffffff;
+          border: 1px solid #16382b;
+          border-radius: var(--radius);
           font-size: 0.78rem;
           font-weight: 600;
-          border-radius: 6px;
           transition: all 0.15s ease;
         }
 
         .btn-close-action:hover {
-          background: #e2e8f0;
-          color: #0f172a;
+          background: var(--brand-secondary);
         }
       `}</style>
     </div>

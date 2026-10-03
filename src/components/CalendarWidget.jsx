@@ -13,7 +13,7 @@ export default function CalendarWidget({ selectedCountry }) {
     <div className="calendar-widget glass-panel">
       <div className="widget-header">
         <div className="widget-title-group">
-          <Calendar size={16} style={{ color: '#2563eb' }} />
+          <Calendar size={15} style={{ color: 'var(--brand-primary)' }} />
           <h3 className="widget-title">Finance Calendar</h3>
         </div>
         <span className="event-count">{filteredEvents.length} events</span>
@@ -67,18 +67,18 @@ export default function CalendarWidget({ selectedCountry }) {
           padding: 1.15rem;
           display: flex;
           flex-direction: column;
-          gap: 0.95rem;
+          gap: 0.85rem;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius);
         }
 
         .widget-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-bottom: 0.65rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+          padding-bottom: 0.55rem;
+          border-bottom: 1px solid #eaecf0;
         }
 
         .widget-title-group {
@@ -88,41 +88,43 @@ export default function CalendarWidget({ selectedCountry }) {
         }
 
         .widget-title {
-          font-size: 0.85rem;
+          font-family: var(--font-serif);
+          font-size: 0.95rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--brand-primary);
           letter-spacing: -0.01em;
         }
 
         .event-count {
           font-size: 0.68rem;
-          color: #64748b;
-          background: #f1f5f9;
-          padding: 0.15rem 0.45rem;
-          border-radius: 9999px;
+          color: var(--text-muted);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
+          padding: 0.1rem 0.4rem;
+          border-radius: var(--radius-sm);
           font-weight: 600;
         }
 
         .events-list {
           display: flex;
           flex-direction: column;
-          gap: 0.65rem;
+          gap: 0.55rem;
         }
 
         .event-item {
           display: flex;
           align-items: flex-start;
-          gap: 0.75rem;
-          padding: 0.65rem;
-          border-radius: 8px;
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          gap: 0.65rem;
+          padding: 0.55rem;
+          border-radius: var(--radius);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .event-item:hover {
-          background: #f1f5f9;
-          border-color: rgba(203, 213, 225, 0.9);
+          background: #f0f7f3;
+          border-color: var(--brand-primary);
         }
 
         .date-badge {
@@ -130,63 +132,67 @@ export default function CalendarWidget({ selectedCountry }) {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          border-radius: 8px;
-          background: rgba(37, 99, 235, 0.08);
-          border: 1px solid rgba(37, 99, 235, 0.2);
+          width: 38px;
+          height: 38px;
+          background: #ffffff;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius-sm);
           flex-shrink: 0;
         }
 
         .date-month {
-          font-size: 0.6rem;
-          font-weight: 700;
+          font-size: 0.58rem;
+          font-weight: 800;
+          color: var(--brand-primary);
           text-transform: uppercase;
-          color: #2563eb;
-          line-height: 1;
         }
 
         .date-day {
-          font-size: 0.92rem;
+          font-size: 0.85rem;
           font-weight: 800;
-          color: #0f172a;
-          line-height: 1.1;
+          color: var(--text-primary);
+          line-height: 1;
         }
 
         .event-details {
+          flex: 1;
           display: flex;
           flex-direction: column;
           gap: 0.2rem;
-          flex: 1;
+          min-width: 0;
         }
 
         .event-top {
           display: flex;
           align-items: center;
-          gap: 0.4rem;
+          justify-content: space-between;
+          gap: 0.35rem;
         }
 
         .event-tag {
           font-size: 0.62rem;
           font-weight: 700;
+          padding: 1px 4px;
+          border-radius: var(--radius-sm);
           text-transform: uppercase;
-          padding: 0.1rem 0.35rem;
-          border-radius: 4px;
         }
 
         .tax-tag {
-          background: rgba(245, 158, 11, 0.1);
-          color: #b45309;
+          background: #fff8f0;
+          color: #8b3a00;
+          border: 1px solid #d4a373;
         }
 
         .reg-tag {
-          background: rgba(139, 92, 246, 0.1);
-          color: #6d28d9;
+          background: #f0f7f3;
+          color: var(--brand-primary);
+          border: 1px solid #a8cfb8;
         }
 
         .econ-tag {
-          background: rgba(6, 182, 212, 0.1);
-          color: #0e7490;
+          background: #f0f7fa;
+          color: #1b4d63;
+          border: 1px solid #9ec5d6;
         }
 
         .event-country {
@@ -196,32 +202,31 @@ export default function CalendarWidget({ selectedCountry }) {
         .event-title {
           font-size: 0.78rem;
           font-weight: 600;
-          color: #1e293b;
+          color: var(--text-primary);
           line-height: 1.35;
-          transition: color 0.15s ease;
         }
 
         .event-title:hover {
-          color: #2563eb;
+          color: var(--brand-primary);
+          text-decoration: underline;
         }
 
         .event-meta {
           display: flex;
           align-items: center;
-          gap: 0.3rem;
+          gap: 0.25rem;
           font-size: 0.68rem;
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         .widget-footer {
-          padding-top: 0.45rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.9);
-          text-align: center;
+          padding-top: 0.4rem;
+          border-top: 1px solid #eaecf0;
         }
 
         .footer-note {
           font-size: 0.68rem;
-          color: #94a3b8;
+          color: var(--text-muted);
         }
       `}</style>
     </div>

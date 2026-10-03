@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Compass, 
   Landmark, 
@@ -48,22 +48,22 @@ export default function DomainNav({
     <nav className="domain-nav-container" aria-label="Financial Domains Navigation">
       <div className="container">
         <div className="nav-row">
-          {/* Scrollable Pills Track */}
+          {/* Scrollable Tabs Track */}
           <div className="scroll-wrapper">
             <div className="pills-track">
-              {/* Special "My Focus" Pill if user has pinned domains */}
+              {/* Special "My Focus" Tab if user has pinned domains */}
               {pinnedDomains.length > 0 && (
                 <button
                   onClick={() => onSelectDomain('my_focus')}
                   className={`domain-pill my-focus-pill ${activeDomain === 'my_focus' ? 'active' : ''}`}
                   title={`Filtered to your pinned domains: ${pinnedDomains.join(', ')}`}
                 >
-                  <Star size={13} className="star-icon filled" />
+                  <Star size={12} className="star-icon filled" />
                   <span className="pill-label">My Focus ({pinnedDomains.length})</span>
                 </button>
               )}
 
-              {/* Standard Domain Pills */}
+              {/* Standard Domain Tabs with Sharp Wikipedia Styling */}
               {DOMAINS.map((domain) => {
                 const IconComponent = ICONS[domain.icon] || Compass;
                 const isActive = activeDomain === domain.id;
@@ -81,7 +81,7 @@ export default function DomainNav({
                       id={`domain-tab-${domain.id}`}
                     >
                       <span className="pill-icon-wrapper">
-                        <IconComponent size={14} />
+                        <IconComponent size={13} />
                       </span>
                       <span className="pill-label">{domain.label}</span>
                       {count > 0 && (
@@ -99,7 +99,7 @@ export default function DomainNav({
                         title={isPinned ? `Remove ${domain.label} from My Focus` : `Pin ${domain.label} to My Focus`}
                         aria-label={`Pin ${domain.label}`}
                       >
-                        <Star size={11} />
+                        <Star size={10} />
                       </button>
                     )}
                   </div>
@@ -115,7 +115,7 @@ export default function DomainNav({
               className="presets-toggle-btn"
               title="Quick domain presets"
             >
-              <Sparkles size={13} style={{ color: '#2563eb' }} />
+              <Sparkles size={12} style={{ color: 'var(--brand-primary)' }} />
               <span className="presets-text">Audience Focus</span>
             </button>
 
@@ -136,7 +136,7 @@ export default function DomainNav({
                       className={`preset-item ${isCurrent ? 'active' : ''}`}
                     >
                       <span>{p.label}</span>
-                      {isCurrent && <Check size={13} style={{ color: '#2563eb' }} />}
+                      {isCurrent && <Check size={12} style={{ color: 'var(--brand-primary)' }} />}
                     </button>
                   );
                 })}
@@ -148,14 +148,12 @@ export default function DomainNav({
 
       <style jsx>{`
         .domain-nav-container {
-          background: rgba(255, 255, 255, 0.92);
+          background: #ffffff;
           border-bottom: 1px solid var(--border-subtle);
           position: sticky;
-          top: 73px;
+          top: 67px;
           z-index: 90;
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
         }
 
         .nav-row {
@@ -169,7 +167,7 @@ export default function DomainNav({
           overflow-x: auto;
           scrollbar-width: none;
           -ms-overflow-style: none;
-          padding: 0.5rem 0;
+          padding: 0.45rem 0;
           flex: 1;
         }
 
@@ -180,7 +178,7 @@ export default function DomainNav({
         .pills-track {
           display: flex;
           align-items: center;
-          gap: 0.4rem;
+          gap: 0.35rem;
           min-width: max-content;
         }
 
@@ -193,47 +191,41 @@ export default function DomainNav({
         .domain-pill {
           display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          padding: 0.38rem 0.8rem;
-          border-radius: 9999px;
-          font-size: 0.78rem;
-          font-weight: 500;
+          gap: 0.35rem;
+          padding: 0.32rem 0.65rem;
+          border-radius: var(--radius);
+          font-size: 0.76rem;
+          font-weight: 600;
           color: var(--text-secondary);
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1px solid var(--border-subtle);
+          transition: all 0.15s ease;
           white-space: nowrap;
-          box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
         }
 
         .domain-pill:hover {
           color: var(--text-primary);
-          background: #f8fafc;
-          border-color: rgba(203, 213, 225, 0.9);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+          border-color: var(--brand-primary);
+          background: #f8faf9;
         }
 
         .domain-pill.active {
           color: #ffffff;
-          background: var(--text-primary);
-          border-color: var(--text-primary);
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+          background: var(--brand-primary);
+          border-color: #16382b;
+          font-weight: 700;
         }
 
         .my-focus-pill {
-          background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.15) 100%);
-          border-color: rgba(245, 158, 11, 0.4);
-          color: #b45309;
-          font-weight: 600;
+          background: #f0f7f3;
+          border-color: #a8cfb8;
+          color: var(--brand-primary);
         }
 
         .my-focus-pill.active {
-          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          background: var(--brand-primary);
           color: #ffffff;
-          border-color: #d97706;
-          box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
+          border-color: #16382b;
         }
 
         .star-icon.filled {
@@ -255,12 +247,12 @@ export default function DomainNav({
         }
 
         .pill-badge {
-          background: rgba(15, 23, 42, 0.06);
+          background: #eaecf0;
           color: var(--text-secondary);
-          font-size: 0.65rem;
+          font-size: 0.62rem;
           font-weight: 700;
-          padding: 0.1rem 0.38rem;
-          border-radius: 9999px;
+          padding: 0.08rem 0.3rem;
+          border-radius: var(--radius-sm);
           line-height: 1;
         }
 
@@ -273,25 +265,25 @@ export default function DomainNav({
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          color: #94a3b8;
-          margin-left: -6px;
+          width: 17px;
+          height: 17px;
+          border-radius: var(--radius-sm);
+          color: #72777d;
+          margin-left: -5px;
           z-index: 2;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .pin-btn:hover {
-          color: #f59e0b;
-          transform: scale(1.15);
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
         }
 
         .pin-btn.pinned {
-          color: #d97706;
-          fill: #f59e0b;
+          color: #b45309;
+          fill: #b45309;
           background: #fef3c7;
           border-color: #fde68a;
         }
@@ -305,67 +297,72 @@ export default function DomainNav({
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          padding: 0.35rem 0.65rem;
-          border-radius: 6px;
-          font-size: 0.72rem;
+          padding: 0.32rem 0.65rem;
+          border-radius: var(--radius);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
+          font-size: 0.74rem;
           font-weight: 600;
-          color: #2563eb;
-          background: rgba(37, 99, 235, 0.08);
-          border: 1px solid rgba(37, 99, 235, 0.2);
-          white-space: nowrap;
+          color: var(--text-primary);
           transition: all 0.15s ease;
+          white-space: nowrap;
         }
 
         .presets-toggle-btn:hover {
-          background: rgba(37, 99, 235, 0.15);
+          border-color: var(--brand-primary);
+          background: #ffffff;
         }
 
         .presets-dropdown {
           position: absolute;
-          right: 0;
           top: calc(100% + 6px);
-          width: 200px;
+          right: 0;
+          width: 210px;
           background: #ffffff;
-          border: 1px solid var(--border-highlight);
-          border-radius: 10px;
+          border: 1px solid #a2a9b1;
+          border-radius: var(--radius);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+          z-index: 150;
           padding: 0.4rem;
-          box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-          z-index: 100;
           display: flex;
           flex-direction: column;
-          gap: 0.2rem;
+          gap: 0.25rem;
         }
 
         .presets-header {
-          font-size: 0.65rem;
+          font-size: 0.68rem;
           font-weight: 700;
-          color: var(--text-muted);
           text-transform: uppercase;
-          letter-spacing: 0.05em;
-          padding: 0.3rem 0.5rem;
+          color: var(--text-muted);
+          padding: 0.3rem 0.45rem;
+          border-bottom: 1px solid #eaecf0;
+          letter-spacing: 0.04em;
         }
 
         .preset-item {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0.45rem 0.6rem;
+          padding: 0.4rem 0.55rem;
+          border-radius: var(--radius-sm);
           font-size: 0.75rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-          border-radius: 6px;
-          transition: all 0.15s ease;
+          color: var(--text-primary);
+          border: 1px solid transparent;
+          background: transparent;
           text-align: left;
+          transition: all 0.15s ease;
         }
 
         .preset-item:hover {
-          background: #f1f5f9;
-          color: var(--text-primary);
+          background: #f0f7f3;
+          border-color: #a8cfb8;
         }
 
         .preset-item.active {
-          background: rgba(37, 99, 235, 0.08);
-          color: #2563eb;
+          background: #f0f7f3;
+          border-color: var(--brand-primary);
+          font-weight: 700;
+          color: var(--brand-primary);
         }
 
         @media (max-width: 640px) {

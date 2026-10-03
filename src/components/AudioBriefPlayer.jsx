@@ -141,16 +141,17 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
   const currentStory = audioStories[currentIndex];
 
   return (
-    <div className={`audio-player-card ${isPlaying ? 'playing' : ''}`}>
+    <div className="audio-player-wrapper">
       <div className="player-inner">
-        {/* Left: Animated Soundwave Icon & Status */}
-        <div className="player-left">
+        {/* Left Meta & Visualizer */}
+        <div className="player-meta-group">
           <div className="audio-badge">
-            <Headphones size={15} className="headphone-icon" />
-            <span className="badge-text">60-Sec Audio Brief</span>
+            <Headphones size={13} className="headphone-icon" />
+            <span>60s Audio Brief</span>
           </div>
 
-          <div className="wave-bars" title={isPlaying ? "Speaking..." : "Audio Ready"}>
+          {/* Soundwave equalizer bars */}
+          <div className="wave-bars">
             <span className={`bar bar-1 ${isPlaying ? 'active' : ''}`} />
             <span className={`bar bar-2 ${isPlaying ? 'active' : ''}`} />
             <span className={`bar bar-3 ${isPlaying ? 'active' : ''}`} />
@@ -160,83 +161,75 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
 
           <div className="story-meta">
             <span className="story-counter">
-              Brief {currentIndex + 1} of {audioStories.length}
+              Story {currentIndex + 1} of {audioStories.length}
             </span>
             <span className="story-snippet" title={currentStory?.headline}>
-              {currentStory?.headline?.slice(0, 48)}...
+              {currentStory?.headline}
             </span>
           </div>
         </div>
 
-        {/* Right: Controls */}
+        {/* Right Playback Controls */}
         <div className="player-controls">
-          <button 
-            onClick={toggleRate} 
-            className="rate-pill-btn"
-            title="Change narration speed"
-          >
-            {playbackRate}×
-          </button>
-
           <button 
             onClick={togglePlay} 
             className="play-main-btn"
-            title={isPlaying ? "Pause Brief" : "Listen to Today's Brief (60s)"}
+            title={isPlaying ? 'Pause audio brief' : 'Listen to 60-second audio brief'}
           >
-            {isPlaying ? <Pause size={16} /> : <Play size={16} style={{ marginLeft: 2 }} />}
-            <span className="btn-label">{isPlaying ? 'Pause' : 'Listen'}</span>
+            {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+            <span>{isPlaying ? 'Pause' : 'Listen'}</span>
           </button>
 
           <button 
             onClick={skipNext} 
-            className="ctrl-icon-btn"
-            title="Next story"
+            className="ctrl-icon-btn" 
+            title="Skip to next story"
           >
-            <SkipForward size={15} />
+            <SkipForward size={14} />
+          </button>
+
+          <button 
+            onClick={toggleRate} 
+            className="rate-pill-btn" 
+            title="Adjust reading speed"
+          >
+            {playbackRate}x
           </button>
 
           {isPlaying && (
             <button 
               onClick={stopPlayback} 
-              className="ctrl-icon-btn stop-btn"
-              title="Stop playback"
+              className="ctrl-icon-btn stop-btn" 
+              title="Stop audio"
             >
-              <RotateCcw size={14} />
+              <RotateCcw size={13} />
             </button>
           )}
         </div>
       </div>
 
       <style jsx>{`
-        .audio-player-card {
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          border-radius: 12px;
-          padding: 0.65rem 1rem;
-          box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-          margin-top: 0.75rem;
-        }
-
-        .audio-player-card.playing {
-          border-color: rgba(59, 130, 246, 0.4);
-          box-shadow: 0 8px 24px -4px rgba(59, 130, 246, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.2);
-          background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+        .audio-player-wrapper {
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
+          border-left: 3px solid var(--brand-primary);
+          border-radius: var(--radius);
+          padding: 0.65rem 0.95rem;
+          margin-top: 0.25rem;
         }
 
         .player-inner {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 1rem;
           flex-wrap: wrap;
+          gap: 0.75rem;
         }
 
-        .player-left {
+        .player-meta-group {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          flex: 1;
+          gap: 0.65rem;
           min-width: 240px;
         }
 
@@ -244,39 +237,39 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.12) 100%);
-          color: #2563eb;
+          background: #f0f7f3;
+          color: var(--brand-primary);
           font-size: 0.72rem;
           font-weight: 700;
-          padding: 0.25rem 0.6rem;
-          border-radius: 9999px;
-          border: 1px solid rgba(59, 130, 246, 0.25);
+          padding: 0.2rem 0.55rem;
+          border-radius: var(--radius-sm);
+          border: 1px solid #a8cfb8;
           letter-spacing: 0.02em;
         }
 
         .headphone-icon {
-          color: #2563eb;
+          color: var(--brand-primary);
         }
 
         /* Soundwave dancing equalizer */
         .wave-bars {
           display: flex;
           align-items: flex-end;
-          gap: 2.5px;
-          height: 18px;
+          gap: 2px;
+          height: 16px;
           padding: 0 2px;
         }
 
         .bar {
           width: 3px;
-          height: 4px;
-          background: #94a3b8;
-          border-radius: 9999px;
-          transition: height 0.15s ease, background 0.2s ease;
+          height: 3px;
+          background: #a2a9b1;
+          border-radius: 0;
+          transition: height 0.15s ease;
         }
 
         .bar.active {
-          background: #2563eb;
+          background: var(--brand-primary);
           animation: waveBounce 0.8s infinite ease-in-out;
         }
 
@@ -287,8 +280,8 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
         .bar-5.active { animation-delay: 0.3s; }
 
         @keyframes waveBounce {
-          0%, 100% { height: 4px; }
-          50% { height: 16px; }
+          0%, 100% { height: 3px; }
+          50% { height: 14px; }
         }
 
         .story-meta {
@@ -299,9 +292,9 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
         }
 
         .story-counter {
-          font-size: 0.68rem;
+          font-size: 0.65rem;
           font-weight: 700;
-          color: #64748b;
+          color: var(--text-muted);
           text-transform: uppercase;
           letter-spacing: 0.04em;
         }
@@ -309,7 +302,7 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
         .story-snippet {
           font-size: 0.78rem;
           font-weight: 600;
-          color: #1e293b;
+          color: var(--text-primary);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -319,61 +312,61 @@ export default function AudioBriefPlayer({ stories = [], onStorySelect }) {
         .player-controls {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.45rem;
         }
 
         .play-main-btn {
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          background: var(--brand-primary);
           color: #ffffff;
-          font-size: 0.78rem;
+          font-size: 0.76rem;
           font-weight: 700;
-          padding: 0.4rem 0.85rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-          transition: all 0.18s ease;
+          padding: 0.35rem 0.8rem;
+          border-radius: var(--radius);
+          border: 1px solid #16382b;
+          transition: all 0.15s ease;
         }
 
         .play-main-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+          background: var(--brand-secondary);
+          border-color: var(--brand-secondary);
         }
 
         .rate-pill-btn {
           font-size: 0.72rem;
           font-weight: 700;
-          color: #475569;
-          background: rgba(241, 245, 249, 0.9);
-          border: 1px solid rgba(203, 213, 225, 0.8);
-          padding: 0.32rem 0.6rem;
-          border-radius: 6px;
+          color: var(--text-secondary);
+          background: #ffffff;
+          border: 1px solid var(--border-subtle);
+          padding: 0.3rem 0.55rem;
+          border-radius: var(--radius-sm);
           transition: all 0.15s ease;
         }
 
         .rate-pill-btn:hover {
-          background: #e2e8f0;
-          color: #0f172a;
+          background: #f8faf9;
+          color: var(--text-primary);
+          border-color: var(--brand-primary);
         }
 
         .ctrl-icon-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          color: #64748b;
-          background: rgba(241, 245, 249, 0.9);
-          border: 1px solid rgba(203, 213, 225, 0.8);
+          width: 30px;
+          height: 30px;
+          border-radius: var(--radius-sm);
+          color: var(--text-secondary);
+          background: #ffffff;
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .ctrl-icon-btn:hover {
-          color: #0f172a;
-          background: #e2e8f0;
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
         }
 
         .stop-btn:hover {

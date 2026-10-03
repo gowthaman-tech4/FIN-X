@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   ExternalLink, 
@@ -11,11 +11,14 @@ import {
   Layers, 
   Tag,
   Building,
-  Check
+  Check,
+  ImageIcon
 } from 'lucide-react';
 import { DOMAINS } from '../data/mockData';
 
 export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSave }) {
+  const [modalImgError, setModalImgError] = useState(false);
+
   if (!isOpen || !story) return null;
 
   const domainObj = DOMAINS.find(d => d.id === story.domain) || {
@@ -28,6 +31,21 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {/* Real News Editorial Header Image (if available) */}
+        {story.image_url && !modalImgError && (
+          <div className="modal-image-wrap">
+            <img 
+              src={story.image_url} 
+              alt={story.headline} 
+              className="modal-cover-img"
+              onError={() => setModalImgError(true)}
+            />
+            <div className="image-credit-tag">
+              <span>Verified Financial Intelligence • {story.source_name}</span>
+            </div>
+          </div>
+        )}
+
         {/* Top Header */}
         <div className="modal-header">
           <div className="header-meta">
@@ -36,7 +54,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
               style={{
                 borderColor: domainObj.color,
                 color: domainObj.color,
-                background: `color-mix(in srgb, ${domainObj.color} 10%, transparent)`
+                background: `color-mix(in srgb, ${domainObj.color} 8%, transparent)`
               }}
             >
               {domainObj.label}
@@ -57,7 +75,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           </button>
         </div>
 
-        {/* Headline */}
+        {/* Headline with Wikipedia Serif */}
         <h2 className="story-headline">{story.headline}</h2>
 
         {/* AI Synthesis Box */}
@@ -72,10 +90,10 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           </div>
         </div>
 
-        {/* Attribution & Context */}
+        {/* Wikipedia Infobox Table Style */}
         <div className="details-grid">
           <div className="detail-item">
-            <span className="label">Original Authority / Media:</span>
+            <span className="label">Original Authority / Desk:</span>
             <span className="value bold">{story.source_name}</span>
           </div>
 
@@ -85,12 +103,12 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           </div>
 
           <div className="detail-item">
-            <span className="label">Discovered & Published:</span>
+            <span className="label">Published:</span>
             <span className="value">{story.published_at} ({story.time_ago})</span>
           </div>
 
           <div className="detail-item">
-            <span className="label">Digest Slot:</span>
+            <span className="label">Digest Edition:</span>
             <span className="value capitalize">{story.digest_slot} Edition</span>
           </div>
         </div>
@@ -110,7 +128,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
             onClick={() => onToggleSave && onToggleSave(story.id)}
             className={`action-btn ${isSaved ? 'saved' : ''}`}
           >
-            <Bookmark size={15} />
+            <Bookmark size={14} />
             <span>{isSaved ? 'Saved in Bookmarks' : 'Save Story'}</span>
           </button>
 
@@ -121,7 +139,7 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
             className="official-link-btn"
           >
             <span>Read Original Circular / Filing</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={13} />
           </a>
         </div>
       </div>
@@ -130,9 +148,9 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         .modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(15, 23, 42, 0.45);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          background: rgba(0, 0, 0, 0.55);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -144,23 +162,51 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
           width: 100%;
           max-width: 620px;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.95);
-          border-radius: 16px;
-          padding: 1.65rem;
-          box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+          border: 1px solid #a2a9b1;
+          border-radius: var(--radius);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
           display: flex;
           flex-direction: column;
-          gap: 1.2rem;
+          gap: 1.15rem;
+          padding: 1.5rem;
           max-height: 90vh;
           overflow-y: auto;
+        }
+
+        .modal-image-wrap {
+          position: relative;
+          width: calc(100% + 3rem);
+          margin: -1.5rem -1.5rem 0 -1.5rem;
+          height: 200px;
+          background: #f1f3f4;
+          border-bottom: 1px solid var(--border-subtle);
+          overflow: hidden;
+        }
+
+        .modal-cover-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .image-credit-tag {
+          position: absolute;
+          bottom: 0.5rem;
+          right: 0.5rem;
+          background: rgba(0, 0, 0, 0.7);
+          color: #ffffff;
+          font-size: 0.65rem;
+          padding: 0.2rem 0.5rem;
+          border-radius: var(--radius);
         }
 
         .modal-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          border-bottom: 1px solid var(--border-subtle);
           padding-bottom: 0.75rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
         }
 
         .header-meta {
@@ -171,61 +217,65 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         }
 
         .domain-pill {
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.68rem;
+          font-size: 0.7rem;
           font-weight: 700;
           text-transform: uppercase;
+          padding: 0.15rem 0.55rem;
+          border-radius: var(--radius-sm);
           border: 1px solid;
+          letter-spacing: 0.03em;
         }
 
         .country-badge {
-          background: #f1f5f9;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          padding: 0.15rem 0.45rem;
-          border-radius: 4px;
           font-size: 0.72rem;
-          color: #475569;
+          color: var(--text-secondary);
+          background: #f8faf9;
+          padding: 0.15rem 0.5rem;
+          border-radius: var(--radius-sm);
+          border: 1px solid var(--border-subtle);
         }
 
         .official-badge {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 0.25rem;
-          background: rgba(16, 185, 129, 0.1);
-          color: #047857;
-          border: 1px solid rgba(16, 185, 129, 0.25);
-          font-size: 0.68rem;
-          font-weight: 700;
-          padding: 0.15rem 0.45rem;
-          border-radius: 4px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: var(--brand-primary);
+          background: #f0f7f3;
+          border: 1px solid #a8cfb8;
+          padding: 0.15rem 0.5rem;
+          border-radius: var(--radius-sm);
         }
 
         .close-btn {
-          color: #64748b;
+          color: var(--text-muted);
           padding: 4px;
-          border-radius: 6px;
+          border: 1px solid transparent;
+          border-radius: var(--radius-sm);
+          background: transparent;
         }
 
         .close-btn:hover {
-          color: #0f172a;
-          background: #f1f5f9;
+          color: var(--text-primary);
+          border-color: #c8ccd1;
+          background: #f8faf9;
         }
 
         .story-headline {
+          font-family: var(--font-serif);
           font-size: 1.35rem;
-          font-weight: 800;
-          color: #0f172a;
+          font-weight: 600;
           line-height: 1.35;
-          letter-spacing: -0.02em;
+          color: var(--text-primary);
         }
 
         .summary-box {
-          background: #f8fafc;
-          border: 1px solid rgba(37, 99, 235, 0.25);
-          border-left: 4px solid #2563eb;
-          padding: 1rem 1.15rem;
-          border-radius: 10px;
+          background: #f8faf9;
+          border: 1px solid #d8ded9;
+          border-left: 3px solid var(--brand-primary);
+          border-radius: var(--radius);
+          padding: 0.95rem 1.1rem;
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
@@ -233,52 +283,55 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
 
         .summary-title {
           font-size: 0.68rem;
-          font-weight: 800;
-          color: #2563eb;
+          font-weight: 700;
+          color: var(--brand-primary);
           letter-spacing: 0.05em;
         }
 
         .summary-lines {
           display: flex;
           flex-direction: column;
-          gap: 0.45rem;
+          gap: 0.4rem;
         }
 
         .line {
-          font-size: 0.92rem;
-          color: #1e293b;
-          line-height: 1.5;
+          font-size: 0.88rem;
+          line-height: 1.55;
+          color: var(--text-primary);
         }
 
+        /* Details Grid */
         .details-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 0.75rem;
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          gap: 0.65rem;
+          background: #ffffff;
+          border: 1px solid #c8ccd1;
+          border-radius: var(--radius);
           padding: 0.85rem;
-          border-radius: 10px;
         }
 
         .detail-item {
           display: flex;
           flex-direction: column;
-          gap: 0.2rem;
+          gap: 0.15rem;
         }
 
-        .label {
+        .detail-item .label {
           font-size: 0.68rem;
-          color: #64748b;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
         }
 
-        .value {
+        .detail-item .value {
           font-size: 0.78rem;
-          color: #334155;
+          color: var(--text-secondary);
         }
 
-        .value.bold {
-          color: #0f172a;
+        .detail-item .value.bold {
           font-weight: 700;
+          color: var(--brand-primary);
         }
 
         .capitalize {
@@ -288,70 +341,71 @@ export default function StoryModal({ story, isOpen, onClose, isSaved, onToggleSa
         .tags-row {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.4rem;
+          gap: 0.45rem;
         }
 
         .tag-chip {
-          background: #f1f5f9;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          padding: 0.2rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.7rem;
-          color: #475569;
+          font-size: 0.72rem;
+          color: var(--brand-secondary);
+          background: #f0f7f3;
+          border: 1px solid #a8cfb8;
+          padding: 0.15rem 0.55rem;
+          border-radius: var(--radius-sm);
         }
 
         .modal-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-top: 0.75rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.9);
+          border-top: 1px solid #eaecf0;
+          padding-top: 0.85rem;
+          gap: 0.75rem;
           flex-wrap: wrap;
-          gap: 0.65rem;
         }
 
         .action-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          background: #f1f5f9;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          color: #334155;
-          font-size: 0.8rem;
-          font-weight: 600;
+          gap: 0.45rem;
           padding: 0.5rem 0.85rem;
-          border-radius: 8px;
+          border: 1px solid var(--border-subtle);
+          background: #ffffff;
+          border-radius: var(--radius);
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: var(--text-secondary);
           transition: all 0.15s ease;
         }
 
         .action-btn:hover {
-          background: #e2e8f0;
-          color: #0f172a;
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
         }
 
         .action-btn.saved {
-          background: rgba(37, 99, 235, 0.08);
-          border-color: rgba(37, 99, 235, 0.3);
-          color: #2563eb;
+          background: #f0f7f3;
+          color: var(--brand-primary);
+          border-color: var(--brand-primary);
         }
 
         .official-link-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-          color: #ffffff;
-          font-size: 0.82rem;
-          font-weight: 700;
+          gap: 0.45rem;
           padding: 0.55rem 1rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+          background: var(--brand-primary);
+          color: #ffffff;
+          border-radius: var(--radius);
+          border: 1px solid #16382b;
+          font-size: 0.8rem;
+          font-weight: 700;
           transition: all 0.15s ease;
         }
 
         .official-link-btn:hover {
-          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-          transform: translateY(-1px);
+          background: var(--brand-secondary);
+          border-color: var(--brand-secondary);
+          text-decoration: none;
         }
       `}</style>
     </div>

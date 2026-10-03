@@ -9,7 +9,7 @@ export default function AuthorityWatch() {
     <div className="authority-widget glass-panel">
       <div className="widget-header">
         <div className="widget-title-group">
-          <ShieldCheck size={16} style={{ color: '#047857' }} />
+          <ShieldCheck size={15} style={{ color: 'var(--brand-primary)' }} />
           <h3 className="widget-title">Official Authority Watch</h3>
         </div>
         <span className="live-pill">
@@ -47,16 +47,16 @@ export default function AuthorityWatch() {
           flex-direction: column;
           gap: 0.85rem;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius);
         }
 
         .widget-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-bottom: 0.65rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+          padding-bottom: 0.55rem;
+          border-bottom: 1px solid #eaecf0;
         }
 
         .widget-title-group {
@@ -66,9 +66,10 @@ export default function AuthorityWatch() {
         }
 
         .widget-title {
-          font-size: 0.85rem;
+          font-family: var(--font-serif);
+          font-size: 0.95rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--brand-primary);
           letter-spacing: -0.01em;
         }
 
@@ -76,12 +77,12 @@ export default function AuthorityWatch() {
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(16, 185, 129, 0.1);
-          border: 1px solid rgba(16, 185, 129, 0.25);
-          padding: 0.12rem 0.45rem;
-          border-radius: 9999px;
+          background: #f0f7f3;
+          border: 1px solid #a8cfb8;
+          padding: 0.1rem 0.45rem;
+          border-radius: var(--radius-sm);
           font-size: 0.65rem;
-          color: #047857;
+          color: var(--brand-primary);
           font-weight: 700;
         }
 
@@ -89,30 +90,30 @@ export default function AuthorityWatch() {
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 6px #10b981;
+          background: var(--brand-accent);
+          box-shadow: 0 0 5px var(--brand-accent);
         }
 
         .authorities-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 0.55rem;
+          gap: 0.5rem;
         }
 
         .auth-card {
           display: flex;
           flex-direction: column;
-          gap: 0.3rem;
-          padding: 0.6rem;
-          border-radius: 8px;
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          gap: 0.25rem;
+          padding: 0.55rem;
+          border-radius: var(--radius);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .auth-card:hover {
-          background: #f1f5f9;
-          border-color: rgba(203, 213, 225, 0.9);
+          background: #f0f7f3;
+          border-color: var(--brand-primary);
         }
 
         .auth-top {
@@ -122,9 +123,9 @@ export default function AuthorityWatch() {
         }
 
         .auth-name {
-          font-size: 0.75rem;
+          font-size: 0.78rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--text-primary);
         }
 
         .auth-flag {
@@ -135,24 +136,22 @@ export default function AuthorityWatch() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 0.65rem;
-          color: #64748b;
+          font-size: 0.68rem;
+          color: var(--text-muted);
         }
 
         .auth-updates strong {
-          color: #2563eb;
+          color: var(--brand-primary);
         }
 
         .widget-footer {
-          padding-top: 0.35rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.9);
-          display: flex;
-          justify-content: space-between;
+          padding-top: 0.4rem;
+          border-top: 1px solid #eaecf0;
         }
 
         .footer-tag {
           font-size: 0.68rem;
-          color: #94a3b8;
+          color: var(--text-muted);
         }
       `}</style>
     </div>

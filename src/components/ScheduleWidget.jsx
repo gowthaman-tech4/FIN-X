@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Clock, Sunrise, Sun, Sunset, CheckCircle2 } from 'lucide-react';
+import { Clock, Sunrise, Sun, Sunset, Sliders, CheckCircle2 } from 'lucide-react';
 
-export default function ScheduleWidget() {
+export default function ScheduleWidget({ onOpenAlerts }) {
   return (
     <div className="schedule-widget glass-panel">
       <div className="widget-header">
-        <Clock size={16} style={{ color: '#2563eb' }} />
+        <Clock size={16} style={{ color: 'var(--brand-primary)' }} />
         <h3 className="widget-title">3× Daily Digest Schedule</h3>
       </div>
 
@@ -54,6 +54,18 @@ export default function ScheduleWidget() {
         </div>
       </div>
 
+      {/* Customizable Time Trigger Button */}
+      <div className="widget-action-row">
+        <button 
+          onClick={onOpenAlerts} 
+          className="edit-schedule-btn"
+          title="Change or customize your notification delivery times"
+        >
+          <Sliders size={12} />
+          <span>Customize Your Delivery Time</span>
+        </button>
+      </div>
+
       <style jsx>{`
         .schedule-widget {
           padding: 1.15rem;
@@ -61,8 +73,8 @@ export default function ScheduleWidget() {
           flex-direction: column;
           gap: 0.75rem;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius);
         }
 
         .widget-header {
@@ -72,44 +84,45 @@ export default function ScheduleWidget() {
         }
 
         .widget-title {
-          font-size: 0.85rem;
+          font-family: var(--font-serif);
+          font-size: 0.95rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--brand-primary);
           letter-spacing: -0.01em;
         }
 
         .widget-desc {
           font-size: 0.75rem;
-          color: #64748b;
+          color: var(--text-secondary);
           line-height: 1.4;
         }
 
         .slots-timeline {
           display: flex;
           flex-direction: column;
-          gap: 0.55rem;
+          gap: 0.5rem;
         }
 
         .slot-item {
           display: flex;
           align-items: flex-start;
           gap: 0.65rem;
-          padding: 0.6rem;
-          border-radius: 8px;
-          background: #f8fafc;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          padding: 0.55rem 0.65rem;
+          border-radius: var(--radius);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .slot-item.current {
-          background: rgba(37, 99, 235, 0.05);
-          border-color: rgba(37, 99, 235, 0.25);
+          background: #f0f7f3;
+          border-color: #a8cfb8;
         }
 
         .slot-icon {
           width: 26px;
           height: 26px;
-          border-radius: 6px;
+          border-radius: var(--radius);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -118,24 +131,24 @@ export default function ScheduleWidget() {
 
         .slot-icon.morning {
           background: #fef3c7;
-          color: #d97706;
+          color: #b45309;
         }
 
         .slot-icon.afternoon {
-          background: #e0f2fe;
-          color: #0284c7;
+          background: #ffedd5;
+          color: #c2410c;
         }
 
         .slot-icon.evening {
-          background: #fae8ff;
-          color: #a21caf;
+          background: #e0e7ff;
+          color: #4338ca;
         }
 
         .slot-info {
+          flex: 1;
           display: flex;
           flex-direction: column;
           gap: 0.15rem;
-          flex: 1;
         }
 
         .slot-head {
@@ -147,23 +160,50 @@ export default function ScheduleWidget() {
         .slot-name {
           font-size: 0.78rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--text-primary);
         }
 
         .current-badge {
           font-size: 0.62rem;
-          font-weight: 800;
-          text-transform: uppercase;
+          font-weight: 700;
+          color: var(--brand-primary);
           background: #d1fae5;
-          color: #047857;
-          padding: 0.1rem 0.4rem;
-          border-radius: 9999px;
+          border: 1px solid #a7f3d0;
+          padding: 1px 5px;
+          border-radius: var(--radius);
+          text-transform: uppercase;
         }
 
         .slot-time {
           font-size: 0.68rem;
-          color: #64748b;
+          color: var(--text-secondary);
           line-height: 1.35;
+        }
+
+        .widget-action-row {
+          padding-top: 0.4rem;
+          border-top: 1px solid #eaecf0;
+        }
+
+        .edit-schedule-btn {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.45rem;
+          padding: 0.45rem 0.75rem;
+          background: #ffffff;
+          border: 1px dashed var(--brand-secondary);
+          color: var(--brand-primary);
+          border-radius: var(--radius);
+          font-size: 0.75rem;
+          font-weight: 600;
+          transition: all 0.15s ease;
+        }
+
+        .edit-schedule-btn:hover {
+          background: #f0f7f3;
+          border-style: solid;
         }
       `}</style>
     </div>

@@ -35,27 +35,27 @@ export default function DigestHero({
                 onClick={() => onSelectDigest('morning')}
                 className={`digest-tab ${activeDigest === 'morning' ? 'active' : ''}`}
               >
-                <Sunrise size={14} className="tab-icon" />
+                <Sunrise size={13} className="tab-icon" />
                 <span>Morning Edition (7 AM IST)</span>
               </button>
               <button
                 onClick={() => onSelectDigest('afternoon')}
                 className={`digest-tab ${activeDigest === 'afternoon' ? 'active' : ''}`}
               >
-                <Sun size={14} className="tab-icon" />
+                <Sun size={13} className="tab-icon" />
                 <span>Midday Pulse (1 PM IST)</span>
               </button>
               <button
                 onClick={() => onSelectDigest('evening')}
                 className={`digest-tab ${activeDigest === 'evening' ? 'active' : ''}`}
               >
-                <Sunset size={14} className="tab-icon" />
+                <Sunset size={13} className="tab-icon" />
                 <span>Evening Wrap (7 PM IST)</span>
               </button>
             </div>
 
             <div className="filter-buttons">
-              <span className="filter-label">Stream:</span>
+              <span className="filter-label">Filter:</span>
               <button
                 onClick={() => onSelectFilter('all')}
                 className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
@@ -66,14 +66,14 @@ export default function DigestHero({
                 onClick={() => onSelectFilter('must_know')}
                 className={`filter-btn ${activeFilter === 'must_know' ? 'active' : ''}`}
               >
-                <Flame size={12} style={{ color: '#ef4444' }} />
+                <Flame size={12} style={{ color: 'var(--critical-color)' }} />
                 <span>Must-Know</span>
               </button>
               <button
                 onClick={() => onSelectFilter('official')}
                 className={`filter-btn ${activeFilter === 'official' ? 'active' : ''}`}
               >
-                <ShieldCheck size={12} style={{ color: '#047857' }} />
+                <ShieldCheck size={12} style={{ color: 'var(--brand-primary)' }} />
                 <span>Official Only</span>
               </button>
             </div>
@@ -84,10 +84,10 @@ export default function DigestHero({
             <div className="hero-text-block">
               <div className="edition-badge">
                 <span className="live-indicator" />
-                <span>FIN-X DAILY INTELLIGENCE DIGEST</span>
+                <span>FIN-X DAILY VERIFIED INTELLIGENCE</span>
               </div>
               <h1 className="hero-heading">
-                The Financial World in <span className="hero-gradient">2 Concise Lines.</span>
+                The Financial World in <span className="hero-highlight">2 Concise Lines.</span>
               </h1>
               <p className="hero-subheading">
                 Zero clickbait, zero fluff. Every critical tax rule, central bank circular, and market shift summarized concisely with direct attribution to authoritative gazettes and regulators.
@@ -101,7 +101,7 @@ export default function DigestHero({
                 <span><strong>{totalStoriesCount}</strong> Stories in Digest</span>
               </div>
               <div className="metric-chip">
-                <ShieldCheck size={13} style={{ color: '#047857' }} />
+                <ShieldCheck size={13} style={{ color: 'var(--brand-primary)' }} />
                 <span><strong>{officialCount}</strong> Official (P0) Authorities</span>
               </div>
               <div className="metric-chip">
@@ -120,30 +120,20 @@ export default function DigestHero({
 
       <style jsx>{`
         .hero-banner {
-          padding: 1.5rem 0 1rem;
+          padding: 1.25rem 0 0.85rem;
         }
 
         .hero-card {
-          background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 16px;
-          padding: 1.5rem 1.75rem;
-          box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+          background: #ffffff;
+          border: 1px solid var(--border-subtle);
+          border-top: 3px solid var(--brand-primary);
+          border-radius: var(--radius);
+          padding: 1.4rem 1.6rem;
+          box-shadow: var(--shadow-sm);
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.15rem;
           position: relative;
-          overflow: hidden;
-        }
-
-        .hero-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, #2563eb 0%, #8b5cf6 50%, #10b981 100%);
         }
 
         .hero-top-row {
@@ -152,27 +142,29 @@ export default function DigestHero({
           justify-content: space-between;
           flex-wrap: wrap;
           gap: 0.75rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+          padding-bottom: 0.85rem;
+          border-bottom: 1px solid #eaecf0;
         }
 
         .digest-tabs {
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          background: #f1f5f9;
-          padding: 0.25rem;
-          border-radius: 9999px;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          gap: 0.3rem;
+          background: #f8faf9;
+          padding: 2px;
+          border-radius: var(--radius);
+          border: 1px solid var(--border-subtle);
         }
 
         .digest-tab {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          padding: 0.35rem 0.75rem;
-          border-radius: 9999px;
-          font-size: 0.75rem;
+          padding: 0.32rem 0.65rem;
+          border-radius: var(--radius-sm);
+          border: none;
+          background: transparent;
+          font-size: 0.74rem;
           font-weight: 600;
           color: var(--text-secondary);
           transition: all 0.15s ease;
@@ -184,14 +176,15 @@ export default function DigestHero({
 
         .digest-tab.active {
           background: #ffffff;
-          color: #0f172a;
-          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+          color: var(--brand-primary);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+          font-weight: 700;
         }
 
         .filter-buttons {
           display: flex;
           align-items: center;
-          gap: 0.4rem;
+          gap: 0.35rem;
         }
 
         .filter-label {
@@ -204,88 +197,95 @@ export default function DigestHero({
           display: inline-flex;
           align-items: center;
           gap: 0.3rem;
-          padding: 0.32rem 0.65rem;
-          border-radius: 6px;
-          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+          border-radius: var(--radius-sm);
+          font-size: 0.74rem;
           font-weight: 600;
           color: var(--text-secondary);
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          border: 1px solid var(--border-subtle);
           transition: all 0.15s ease;
         }
 
         .filter-btn:hover {
-          background: #f8fafc;
+          background: #f8faf9;
           color: var(--text-primary);
+          border-color: var(--brand-primary);
         }
 
         .filter-btn.active {
-          background: #0f172a;
+          background: var(--brand-primary);
           color: #ffffff;
-          border-color: #0f172a;
+          border-color: #16382b;
         }
 
         .hero-main-content {
           display: flex;
           flex-direction: column;
-          gap: 0.85rem;
+          gap: 0.75rem;
         }
 
         .edition-badge {
           display: inline-flex;
           align-items: center;
           gap: 0.45rem;
-          font-size: 0.7rem;
+          font-size: 0.68rem;
           font-weight: 800;
           letter-spacing: 0.06em;
-          color: #2563eb;
+          color: var(--brand-primary);
           text-transform: uppercase;
         }
 
         .hero-heading {
-          font-size: 1.85rem;
-          font-weight: 800;
-          color: #0f172a;
-          line-height: 1.25;
-          letter-spacing: -0.025em;
+          font-family: var(--font-serif);
+          font-size: 2.15rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          line-height: 1.22;
+          letter-spacing: -0.01em;
         }
 
-        .hero-gradient {
-          background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .hero-highlight {
+          color: var(--brand-primary);
+          text-decoration: underline;
+          text-decoration-color: var(--brand-accent);
+          text-underline-offset: 4px;
         }
 
         .hero-subheading {
-          font-size: 0.92rem;
-          color: #475569;
-          line-height: 1.5;
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          line-height: 1.55;
           max-width: 780px;
         }
 
         .metrics-row {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.65rem;
           flex-wrap: wrap;
-          margin-top: 0.25rem;
+          margin-top: 0.2rem;
         }
 
         .metric-chip {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          padding: 0.3rem 0.65rem;
-          border-radius: 6px;
-          background: #f1f5f9;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          font-size: 0.75rem;
-          color: #334155;
+          padding: 0.25rem 0.55rem;
+          border-radius: var(--radius-sm);
+          background: #f8faf9;
+          border: 1px solid var(--border-subtle);
+          font-size: 0.74rem;
+          color: var(--text-secondary);
+        }
+
+        .metric-chip strong {
+          color: var(--brand-primary);
         }
 
         @media (max-width: 768px) {
           .hero-heading {
-            font-size: 1.45rem;
+            font-size: 1.55rem;
           }
           .hero-top-row {
             flex-direction: column;

@@ -225,7 +225,7 @@ export default function Home() {
         >
           <div className="toast-inner">
             <div className="toast-icon-box">
-              <Bell size={16} />
+              <img src="/logo.png" alt="FIN-X" className="toast-logo-img" />
             </div>
             <div className="toast-content">
               <div className="toast-header-row">
@@ -364,12 +364,12 @@ export default function Home() {
               
               <AuthorityWatch />
 
-              <ScheduleWidget />
+              <ScheduleWidget onOpenAlerts={() => setIsAlertsOpen(true)} />
 
               {/* Source Registry Callout Card */}
               <div className="source-card glass-panel">
                 <div className="source-card-head">
-                  <ShieldCheck size={16} style={{ color: '#047857' }} />
+                  <ShieldCheck size={16} style={{ color: 'var(--brand-primary)' }} />
                   <span className="source-card-title">100% Attribution Transparency</span>
                 </div>
                 <p className="source-card-body">
@@ -393,9 +393,15 @@ export default function Home() {
         <div className="container">
           <div className="footer-top">
             <div className="footer-brand">
-              <div className="footer-logo">FIN<span className="logo-accent">-X</span></div>
+              <div className="footer-brand-lockup">
+                <img src="/logo.png" alt="FIN-X" className="footer-logo-img" />
+                <div className="footer-brand-text">
+                  <span className="footer-brand-title">FIN-X</span>
+                  <span className="footer-brand-sub">FINANCE NEWS FOR YOU</span>
+                </div>
+              </div>
               <p className="footer-tagline">
-                The global financial intelligence platform. Discover what happens in money across tax, regulation, markets, and policy without the noise.
+                The authoritative financial intelligence platform. Discover what happens in money across tax, regulation, markets, and policy without the noise.
               </p>
             </div>
 
@@ -411,7 +417,7 @@ export default function Home() {
               <div className="footer-col">
                 <span className="footer-heading">Product & Transparency</span>
                 <button onClick={() => setIsSourceRegistryOpen(true)} className="footer-link">Source Registry (17 Feeds)</button>
-                <button onClick={() => setIsAlertsOpen(true)} className="footer-link">Must-Know Alerts</button>
+                <button onClick={() => setIsAlertsOpen(true)} className="footer-link">Custom Alert Times</button>
                 <a href="#calendar" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="footer-link">Tax & Rate Calendar</a>
               </div>
             </div>
@@ -456,17 +462,17 @@ export default function Home() {
           background: #f8fafc;
         }
 
-        /* Swiggy/Zomato Toast Animation */
+        /* Swiggy/Zomato Toast Animation - Sharp Wikipedia Style */
         .push-notification-toast {
           position: fixed;
           top: 85px;
           right: 24px;
           z-index: 1000;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.95);
-          border-left: 4px solid #2563eb;
-          border-radius: 12px;
-          box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.16);
+          border: 1px solid #a2a9b1;
+          border-left: 4px solid var(--brand-primary);
+          border-radius: var(--radius);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
           padding: 0.85rem 1rem;
           max-width: 380px;
           animation: slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -479,15 +485,21 @@ export default function Home() {
         }
 
         .toast-icon-box {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          background: rgba(37, 99, 235, 0.1);
-          color: #2563eb;
+          width: 34px;
+          height: 34px;
+          border-radius: var(--radius-sm);
+          background: #f0f7f3;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
+          overflow: hidden;
+        }
+
+        .toast-logo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         .toast-content {
@@ -502,34 +514,37 @@ export default function Home() {
           align-items: center;
           justify-content: space-between;
           font-size: 0.65rem;
-          color: #94a3b8;
+          color: var(--text-muted);
         }
 
         .toast-app-name {
           font-weight: 700;
-          color: #2563eb;
+          color: var(--brand-primary);
           text-transform: uppercase;
         }
 
         .toast-title {
-          font-size: 0.82rem;
-          font-weight: 800;
-          color: #0f172a;
+          font-family: var(--font-serif);
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: var(--text-primary);
         }
 
         .toast-body {
           font-size: 0.75rem;
-          color: #475569;
+          color: var(--text-secondary);
           line-height: 1.35;
         }
 
         .toast-close-btn {
-          color: #94a3b8;
+          color: var(--text-muted);
           padding: 2px;
+          border: none;
+          background: transparent;
         }
 
         .toast-close-btn:hover {
-          color: #0f172a;
+          color: var(--text-primary);
         }
 
         .main-content {
@@ -555,7 +570,7 @@ export default function Home() {
           align-items: center;
           justify-content: space-between;
           padding-bottom: 0.5rem;
-          border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+          border-bottom: 1px solid var(--border-subtle);
           flex-wrap: wrap;
           gap: 0.5rem;
         }
@@ -567,9 +582,10 @@ export default function Home() {
         }
 
         .feed-title {
-          font-size: 1.05rem;
-          font-weight: 800;
-          color: #0f172a;
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: var(--brand-primary);
           letter-spacing: -0.01em;
         }
 
@@ -577,18 +593,18 @@ export default function Home() {
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(239, 68, 68, 0.08);
-          color: #dc2626;
-          border: 1px solid rgba(239, 68, 68, 0.25);
+          background: #fef2f2;
+          color: var(--critical-color);
+          border: 1px solid var(--critical-border);
           font-size: 0.7rem;
           font-weight: 600;
           padding: 0.2rem 0.5rem;
-          border-radius: 6px;
+          border-radius: var(--radius-sm);
           transition: all 0.15s ease;
         }
 
         .clear-filters-btn:hover {
-          background: #dc2626;
+          background: var(--critical-color);
           color: #ffffff;
         }
 
@@ -604,25 +620,25 @@ export default function Home() {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          background: rgba(16, 185, 129, 0.1);
-          border: 1px solid rgba(16, 185, 129, 0.25);
-          color: #047857;
+          background: #f0f7f3;
+          border: 1px solid #a8cfb8;
+          color: var(--brand-primary);
           font-size: 0.68rem;
           font-weight: 700;
           padding: 0.15rem 0.5rem;
-          border-radius: 9999px;
+          border-radius: var(--radius-sm);
         }
 
         .live-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 6px #10b981;
+          background: var(--brand-accent);
+          box-shadow: 0 0 6px var(--brand-accent);
         }
 
         .sort-label {
-          color: #64748b;
+          color: var(--text-muted);
           font-weight: 500;
         }
 
@@ -640,8 +656,8 @@ export default function Home() {
           text-align: center;
           gap: 0.75rem;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius);
         }
 
         .empty-icon {
@@ -649,9 +665,10 @@ export default function Home() {
         }
 
         .empty-title {
-          font-size: 1.1rem;
-          font-weight: 800;
-          color: #0f172a;
+          font-family: var(--font-serif);
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: var(--text-primary);
         }
 
         .empty-desc {
@@ -662,19 +679,18 @@ export default function Home() {
 
         .empty-reset-btn {
           margin-top: 0.5rem;
-          padding: 0.5rem 1.15rem;
-          background: #2563eb;
+          padding: 0.45rem 1rem;
+          background: var(--brand-primary);
           color: #ffffff;
           font-size: 0.8rem;
           font-weight: 600;
-          border-radius: 8px;
+          border: 1px solid #16382b;
+          border-radius: var(--radius);
           transition: all 0.15s ease;
         }
 
         .empty-reset-btn:hover {
-          background: #1d4ed8;
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-          transform: translateY(-1px);
+          background: var(--brand-secondary);
         }
 
         .sidebar-column {
@@ -689,8 +705,9 @@ export default function Home() {
           flex-direction: column;
           gap: 0.65rem;
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          border-left: 3px solid var(--brand-primary);
+          border-radius: var(--radius);
         }
 
         .source-card-head {
@@ -700,15 +717,16 @@ export default function Home() {
         }
 
         .source-card-title {
-          font-size: 0.82rem;
+          font-family: var(--font-serif);
+          font-size: 0.85rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--text-primary);
         }
 
         .source-card-body {
           font-size: 0.73rem;
           line-height: 1.45;
-          color: #475569;
+          color: var(--text-secondary);
         }
 
         .source-card-btn {
@@ -717,18 +735,19 @@ export default function Home() {
           gap: 0.35rem;
           font-size: 0.74rem;
           font-weight: 600;
-          color: #2563eb;
+          color: var(--brand-primary);
           width: fit-content;
           transition: color 0.15s ease;
         }
 
         .source-card-btn:hover {
-          color: #1d4ed8;
+          color: var(--brand-secondary);
+          text-decoration: underline;
         }
 
-        /* Footer */
+        /* Footer with Brand Logo */
         .footer-wrapper {
-          border-top: 1px solid rgba(226, 232, 240, 0.9);
+          border-top: 1px solid var(--border-subtle);
           background: #ffffff;
           padding: 2.5rem 0 1.5rem 0;
           margin-top: auto;
@@ -746,23 +765,48 @@ export default function Home() {
           max-width: 420px;
         }
 
-        .footer-logo {
-          font-size: 1.4rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin-bottom: 0.5rem;
+        .footer-brand-lockup {
+          display: flex;
+          align-items: center;
+          gap: 0.65rem;
+          margin-bottom: 0.75rem;
         }
 
-        .logo-accent {
-          background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .footer-logo-img {
+          height: 42px;
+          width: auto;
+          object-fit: contain;
+        }
+
+        .footer-brand-text {
+          display: flex;
+          flex-direction: column;
+          border-left: 2px solid var(--brand-primary);
+          padding-left: 0.6rem;
+        }
+
+        .footer-logo-title {
+          font-family: var(--font-serif);
+          font-size: 1.35rem;
+          font-weight: 700;
+          color: var(--brand-primary);
+          line-height: 1;
+          letter-spacing: 0.04em;
+        }
+
+        .footer-logo-sub {
+          font-family: var(--font-sans);
+          font-size: 0.58rem;
+          font-weight: 700;
+          color: var(--brand-secondary);
+          letter-spacing: 0.08em;
+          margin-top: 2px;
         }
 
         .footer-tagline {
           font-size: 0.8rem;
           line-height: 1.5;
-          color: #475569;
+          color: var(--text-secondary);
         }
 
         .footer-links-group {
@@ -780,7 +824,7 @@ export default function Home() {
         .footer-heading {
           font-size: 0.78rem;
           font-weight: 700;
-          color: #0f172a;
+          color: var(--brand-primary);
           text-transform: uppercase;
           letter-spacing: 0.04em;
           margin-bottom: 0.25rem;
@@ -788,13 +832,17 @@ export default function Home() {
 
         .footer-link {
           font-size: 0.76rem;
-          color: #475569;
+          color: var(--text-secondary);
           text-align: left;
+          background: transparent;
+          border: none;
+          padding: 0;
           transition: color 0.15s ease;
         }
 
         .footer-link:hover {
-          color: #2563eb;
+          color: var(--brand-primary);
+          text-decoration: underline;
         }
 
         .footer-bottom {
@@ -802,18 +850,18 @@ export default function Home() {
           flex-direction: column;
           gap: 1rem;
           padding-top: 1.5rem;
-          border-top: 1px solid rgba(241, 245, 249, 0.95);
+          border-top: 1px solid #eaecf0;
         }
 
         .disclaimer-text {
           font-size: 0.72rem;
           line-height: 1.5;
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         .footer-copy {
           font-size: 0.7rem;
-          color: #94a3b8;
+          color: var(--text-muted);
         }
 
         @media (max-width: 1024px) {
